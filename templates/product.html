@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - {{ site_name }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #008080;
+            --gray: #A0A0A0;
+            --white: #F0F0F0;
+            --blue: #000080;
+            --red: #800000;
+            --black: #0a0a0a;
+            --window-bg: #F0F0F0;
+            --text: #1a1a1a;
+            --text-muted: #666;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            font-size: 14px;
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            line-height: 1.5;
+            overflow: hidden;
+        }
+
+        .desktop {
+            width: 100vw;
+            height: 100vh;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(0, 120, 215, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 160, 160, 0.08) 0%, transparent 50%),
+                linear-gradient(135deg, #006868 0%, #008080 50%, #007070 100%);
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 30px 30px 50px;
+        }
+
+        .desktop::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .window {
+            background: var(--window-bg);
+            border-top: 2px solid #dfdfdf;
+            border-left: 2px solid #dfdfdf;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            border-radius: 0;
+            box-shadow: 1px 1px 0 #000;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 780px;
+            height: calc(100vh - 80px);
+        }
+
+        .window-header {
+            background: linear-gradient(90deg, #000035, #003580);
+            color: white;
+            padding: 6px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            user-select: none;
+        }
+
+        .window-header-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-ico { image-rendering: pixelated; display: inline-block; }
+
+        .ico-products {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='3' y='8' width='26' height='20' fill='%23c09050'/%3E%3Crect x='3' y='8' width='26' height='1' fill='%23e0c090'/%3E%3Crect x='3' y='8' width='1' height='20' fill='%23e0c090'/%3E%3Crect x='28' y='8' width='1' height='20' fill='%23806030'/%3E%3Crect x='3' y='27' width='26' height='1' fill='%23806030'/%3E%3Crect x='3' y='8' width='26' height='5' fill='%23d0a060'/%3E%3Crect x='3' y='12' width='26' height='1' fill='%23806030'/%3E%3Crect x='12' y='6' width='8' height='4' fill='%23d0a060'/%3E%3Crect x='12' y='6' width='8' height='1' fill='%23e0c090'/%3E%3Crect x='12' y='6' width='1' height='4' fill='%23e0c090'/%3E%3Crect x='19' y='6' width='1' height='4' fill='%23806030'/%3E%3Crect x='14' y='14' width='4' height='3' fill='%23e0c090'/%3E%3C/svg%3E") no-repeat center/contain;
+        }
+
+        .window-controls { display: flex; gap: 4px; }
+
+        .window-ctrl {
+            width: 20px;
+            height: 20px;
+            background: #c0c0c0;
+            color: #000;
+            border-top: 1px solid #dfdfdf;
+            border-left: 1px solid #dfdfdf;
+            border-right: 1px solid #404040;
+            border-bottom: 1px solid #404040;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 2px;
+            font-family: inherit;
+        }
+
+        .window-ctrl:active {
+            border-top: 1px solid #404040;
+            border-left: 1px solid #404040;
+            border-right: 1px solid #dfdfdf;
+            border-bottom: 1px solid #dfdfdf;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 4px;
+            padding: 6px 10px;
+            background: #e0e0e0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .btn {
+            padding: 5px 12px;
+            background: white;
+            border: 1px solid #ccc;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--text);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 2px;
+        }
+
+        .btn:hover { border-color: var(--blue); color: var(--blue); }
+        .btn.primary { background: var(--blue); color: white; border-color: var(--blue); }
+        .btn.primary:hover { background: #006abc; }
+
+        .window-body {
+            flex: 1;
+            overflow-y: auto;
+            background: white;
+        }
+
+        /* ── Product Header ── */
+        .product-header {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+            background: linear-gradient(135deg, rgba(0,120,215,0.03) 0%, transparent 60%);
+        }
+
+        .product-icon-large {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .product-info h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .product-tagline {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .product-badges { display: flex; gap: 6px; }
+
+        .badge {
+            padding: 3px 10px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 7px;
+            border-radius: 2px;
+            border: 1px solid;
+        }
+
+        .badge.green {
+            background: rgba(0, 128, 0, 0.1);
+            color: #008000;
+            border-color: #008000;
+        }
+
+        .badge.blue {
+            background: rgba(0, 120, 215, 0.1);
+            color: var(--blue);
+            border-color: var(--blue);
+        }
+
+        /* ── Product Body ── */
+        .product-body {
+            padding: 30px;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .product-body h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 11px;
+            color: var(--black);
+            margin: 28px 0 14px;
+            line-height: 1.6;
+        }
+
+        .product-body h1:first-child { margin-top: 0; }
+
+        .product-body h2 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            color: var(--blue);
+            margin: 24px 0 12px;
+            line-height: 1.6;
+        }
+
+        .product-body h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 20px 0 10px;
+        }
+
+        .product-body p { margin-bottom: 16px; }
+
+        .product-body ul, .product-body ol { margin: 14px 0 14px 24px; }
+        .product-body li { margin-bottom: 6px; }
+
+        .product-body a { color: var(--blue); text-decoration: underline; }
+        .product-body a:hover { color: #005a9e; }
+
+        .product-body code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+        }
+
+        .product-body .code-block {
+            background: var(--black);
+            color: #00ff41;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 20px 0;
+            overflow-x: auto;
+            white-space: pre;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+
+        .product-body blockquote {
+            margin: 20px 0;
+            padding: 16px 20px;
+            border-left: 3px solid var(--blue);
+            background: #f8f9fa;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .window-statusbar {
+            padding: 3px 10px;
+            background: #c0c0c0;
+            border-top: 1px solid #808080;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* ── Taskbar ── */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: #c0c0c0;
+            border-top: 2px solid #dfdfdf;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            z-index: 9999;
+            gap: 4px;
+        }
+
+        .start-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 8px;
+            background: #c0c0c0;
+            color: #000;
+            border-top: 2px solid #dfdfdf;
+            border-left: 2px solid #dfdfdf;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            cursor: pointer;
+            height: 24px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .taskbar-divider { width: 2px; height: 22px; border-left: 1px solid #808080; border-right: 1px solid #dfdfdf; margin: 0 4px; }
+        .taskbar-items { flex: 1; display: flex; gap: 4px; overflow: hidden; }
+
+        .taskbar-item {
+            padding: 2px 8px;
+            font-size: 11px;
+            border-top: 1px solid #404040;
+            border-left: 1px solid #404040;
+            border-right: 1px solid #dfdfdf;
+            border-bottom: 1px solid #dfdfdf;
+            background: #c0c0c0;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .taskbar-clock {
+            padding: 2px 8px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            color: #000;
+            border-top: 1px solid #404040;
+            border-left: 1px solid #404040;
+            border-right: 1px solid #dfdfdf;
+            border-bottom: 1px solid #dfdfdf;
+            border-radius: 2px;
+            background: white;
+            height: 28px;
+            display: flex;
+            align-items: center;
+        }
+
+        .window-body::-webkit-scrollbar { width: 12px; }
+        .window-body::-webkit-scrollbar-track { background: #f0f0f0; }
+        .window-body::-webkit-scrollbar-thumb { background: #c0c0c0; border: 1px solid #a0a0a0; }
+        .window-body::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
+
+        @media (max-width: 768px) {
+            .desktop { padding: 0 0 40px; }
+            .window { max-width: 100%; height: calc(100vh - 40px); border-radius: 0; border: none; }
+            .product-header, .product-body { padding: 20px; }
+            .product-header { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="desktop">
+        <div class="window">
+            <div class="window-header">
+                <div class="window-header-title">
+                    <span class="nav-ico ico-products" style="width:16px;height:16px;"></span>
+                    <span>{{ title }} — explorer.exe</span>
+                </div>
+                <div class="window-controls">
+                    <button class="window-ctrl">─</button>
+                    <button class="window-ctrl">□</button>
+                    <button class="window-ctrl close" onclick="window.location.href='index.html'">×</button>
+                </div>
+            </div>
+
+            <div class="window-body">
+                <div class="product-header">
+                    <div class="product-icon-large">{{ icon }}</div>
+                    <div class="product-info">
+                        <h1>{{ title }}</h1>
+                        <p class="product-tagline">{{ tagline }}</p>
+                        <div class="product-badges">
+                            <span class="badge green">{{ status }}</span>
+                            <span class="badge blue">{{ version }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-body">
+                    {{ body }}
+                </div>
+            </div>
+
+            <div class="window-statusbar">
+                <span>📦 {{ title }} · {{ version }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="taskbar">
+        <a href="index.html" class="start-btn">⊞ START</a>
+        <div class="taskbar-divider"></div>
+        <div class="taskbar-items">
+            <div class="taskbar-item"><span class="nav-ico ico-products" style="width:14px;height:14px;vertical-align:middle;"></span> {{ title }}</div>
+        </div>
+        <div class="taskbar-clock" id="clock">00:00</div>
+    </div>
+
+    <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const h = now.getHours().toString().padStart(2, '0');
+            const m = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = h + ':' + m;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>khabib</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #008080;
+            --desktop-bg: #008080;
+            --gray: #808080;
+            --white: #d4d4d4;
+            --blue: #000080;
+            --red: #800000;
+            --black: #0a0a0a;
+            --dark: #2a2a2a;
+            --window-bg: #c0c0c0;
+            --window-header: #000080;
+            --window-header-inactive: #808080;
+            --border: #808080;
+            --text: #0a0a0a;
+            --text-muted: #555;
+            --accent: #000080;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            font-size: 14px;
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            line-height: 1.5;
+            overflow: hidden;
+        }
+
+        /* ── Desktop ── */
+        .desktop {
+            width: 100vw;
+            height: 100vh;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(0, 120, 215, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 160, 160, 0.08) 0%, transparent 50%),
+                linear-gradient(135deg, #006868 0%, #008080 50%, #007070 100%);
+            position: relative;
+            padding-bottom: 40px;
+        }
+
+        /* ── Scanline overlay ── */
+        .desktop::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.02) 2px,
+                rgba(0,0,0,0.02) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* ── Desktop Icons (removed - merged into sidebar) ── */
+
+        /* ── Window ── */
+        .window {
+            position: absolute;
+            background: var(--window-bg);
+            border-top: 2px solid #dfdfdf;
+            border-left: 2px solid #dfdfdf;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            border-radius: 0;
+            box-shadow: 1px 1px 0 #000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .window.hidden { display: none; }
+
+        .window-header {
+            background: linear-gradient(90deg, #000035, #003580);
+            color: white;
+            padding: 4px 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: grab;
+            user-select: none;
+            font-size: 12px;
+            font-family: 'Press Start 2P', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        .window.inactive .window-header {
+            background: linear-gradient(90deg, #808080, #b0b0b0);
+        }
+
+        .window-header-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 9px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .window-ctrl {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            color: #000;
+            font-size: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            border-top: 1px solid #dfdfdf;
+            border-left: 1px solid #dfdfdf;
+            border-right: 1px solid #404040;
+            border-bottom: 1px solid #404040;
+            font-family: inherit;
+        }
+
+        .window-ctrl:active {
+            border-top: 1px solid #404040;
+            border-left: 1px solid #404040;
+            border-right: 1px solid #dfdfdf;
+            border-bottom: 1px solid #dfdfdf;
+        }
+
+        .window-toolbar {
+            display: flex;
+            gap: 1px;
+            padding: 4px 6px;
+            background: #e0e0e0;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+        }
+
+        .toolbar-btn {
+            padding: 4px 10px;
+            background: transparent;
+            border: 1px solid transparent;
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .toolbar-btn:hover {
+            background: rgba(0, 120, 215, 0.1);
+            border-color: var(--border);
+        }
+
+        .toolbar-btn.active {
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+        }
+
+        .window-body {
+            flex: 1;
+            overflow-y: auto;
+            background: var(--window-bg);
+        }
+
+        .window-statusbar {
+            padding: 3px 10px;
+            background: #c0c0c0;
+            border-top: 1px solid #808080;
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* ── Main Window Layout ── */
+        .main-window {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1210px;
+            max-width: calc(100vw - 40px);
+            height: 900px;
+            max-height: calc(100vh - 80px);
+            z-index: 10;
+        }
+
+        .main-layout {
+            display: flex;
+            height: 100%;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            width: 200px;
+            background: #c0c0c0;
+            border-right: 1px solid #808080;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 16px 14px 12px;
+            border-bottom: 1px solid #808080;
+        }
+
+        .sidebar-header h2 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            color: #000080;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-header p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 8px 0;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text);
+            border-left: 3px solid transparent;
+            transition: all 0.1s;
+        }
+
+        .nav-item:hover {
+            background: #000080;
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: #000080;
+            border-left-color: #000080;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .nav-item .nav-ico {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            image-rendering: pixelated;
+        }
+
+        /* ── Win95 Pixel Icons ── */
+        .ico-home {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='4' y='18' width='24' height='12' fill='%23c0c0c0'/%3E%3Crect x='4' y='18' width='24' height='1' fill='%23fff'/%3E%3Crect x='4' y='18' width='1' height='12' fill='%23fff'/%3E%3Crect x='27' y='18' width='1' height='12' fill='%23808080'/%3E%3Crect x='4' y='29' width='24' height='1' fill='%23808080'/%3E%3Cpolygon points='16,4 2,18 30,18' fill='%230000aa'/%3E%3Cpolygon points='16,6 4,18 28,18' fill='%230000cc'/%3E%3Crect x='12' y='22' width='8' height='8' fill='%23000080'/%3E%3Crect x='14' y='24' width='4' height='4' fill='%2300ffff'/%3E%3C/svg%3E") no-repeat center/contain;
+        }
+
+        .ico-essays {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='4' y='2' width='20' height='28' fill='%23fff'/%3E%3Crect x='4' y='2' width='20' height='1' fill='%23fff'/%3E%3Crect x='4' y='2' width='1' height='28' fill='%23dfdfdf'/%3E%3Crect x='23' y='2' width='1' height='28' fill='%23808080'/%3E%3Crect x='4' y='29' width='20' height='1' fill='%23808080'/%3E%3Crect x='24' y='2' width='4' height='4' fill='%23c0c0c0'/%3E%3Cline x1='24' y1='2' x2='28' y2='6' stroke='%23808080' stroke-width='1'/%3E%3Crect x='7' y='8' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='11' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='14' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='17' width='10' height='1' fill='%23000080'/%3E%3Crect x='7' y='20' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='23' width='8' height='1' fill='%23000080'/%3E%3C/svg%3E") no-repeat center/contain;
+        }
+
+        .ico-products {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='3' y='8' width='26' height='20' fill='%23c09050'/%3E%3Crect x='3' y='8' width='26' height='1' fill='%23e0c090'/%3E%3Crect x='3' y='8' width='1' height='20' fill='%23e0c090'/%3E%3Crect x='28' y='8' width='1' height='20' fill='%23806030'/%3E%3Crect x='3' y='27' width='26' height='1' fill='%23806030'/%3E%3Crect x='3' y='8' width='26' height='5' fill='%23d0a060'/%3E%3Crect x='3' y='12' width='26' height='1' fill='%23806030'/%3E%3Crect x='12' y='6' width='8' height='4' fill='%23d0a060'/%3E%3Crect x='12' y='6' width='8' height='1' fill='%23e0c090'/%3E%3Crect x='12' y='6' width='1' height='4' fill='%23e0c090'/%3E%3Crect x='19' y='6' width='1' height='4' fill='%23806030'/%3E%3Crect x='14' y='14' width='4' height='3' fill='%23e0c090'/%3E%3C/svg%3E") no-repeat center/contain;
+        }
+
+        .ico-bookmarks {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Cpolygon points='16,2 19.5,11 29,11 21.5,17 24,27 16,21 8,27 10.5,17 3,11 12.5,11' fill='%23ffff00'/%3E%3Cpolygon points='16,2 19.5,11 29,11 21.5,17 24,27 16,21 8,27 10.5,17 3,11 12.5,11' fill='none' stroke='%23808000' stroke-width='1'/%3E%3Cpolygon points='16,5 18.5,12 27,12 20.5,17 22.5,25 16,20 9.5,25 11.5,17 5,12 13.5,12' fill='%23ffff80'/%3E%3C/svg%3E") no-repeat center/contain;
+        }
+
+        .ico-about {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Ccircle cx='16' cy='10' r='6' fill='%23ffcc99'/%3E%3Ccircle cx='16' cy='10' r='6' fill='none' stroke='%23806040' stroke-width='1'/%3E%3Crect x='8' y='16' width='16' height='14' rx='2' fill='%230000aa'/%3E%3Crect x='8' y='16' width='16' height='1' fill='%230000cc'/%3E%3Crect x='8' y='16' width='1' height='14' fill='%230000cc'/%3E%3Crect x='23' y='16' width='1' height='14' fill='%23000066'/%3E%3Crect x='12' y='18' width='8' height='1' fill='%23fff'/%3E%3Crect x='14' y='20' width='4' height='1' fill='%23fff'/%3E%3C/svg%3E") no-repeat center/contain;
+        }
+
+        .ico-computer {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='2' y='2' width='28' height='20' fill='%23c0c0c0'/%3E%3Crect x='2' y='2' width='28' height='1' fill='%23fff'/%3E%3Crect x='2' y='2' width='1' height='20' fill='%23fff'/%3E%3Crect x='29' y='2' width='1' height='20' fill='%23808080'/%3E%3Crect x='2' y='21' width='28' height='1' fill='%23808080'/%3E%3Crect x='4' y='4' width='24' height='16' fill='%23000080'/%3E%3Crect x='6' y='6' width='20' height='12' fill='%2300aaaa'/%3E%3Crect x='10' y='23' width='12' height='3' fill='%23c0c0c0'/%3E%3Crect x='10' y='23' width='12' height='1' fill='%23fff'/%3E%3Crect x='6' y='26' width='20' height='4' fill='%23c0c0c0'/%3E%3Crect x='6' y='26' width='20' height='1' fill='%23fff'/%3E%3Crect x='6' y='26' width='1' height='4' fill='%23fff'/%3E%3Crect x='25' y='26' width='1' height='4' fill='%23808080'/%3E%3Crect x='6' y='29' width='20' height='1' fill='%23808080'/%3E%3C/svg%3E") no-repeat center/contain;
+        }
+
+        .sidebar-footer {
+            padding: 10px 14px;
+            border-top: 1px solid #808080;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* ── Content Area ── */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            background: #ffffff;
+        }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* ── Home Section ── */
+        .home-hero {
+            padding: 40px 30px;
+            background:
+                linear-gradient(135deg, rgba(0,0,128,0.04) 0%, transparent 60%);
+            border-bottom: 1px solid #ddd;
+        }
+
+        .home-hero h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 20px;
+            color: var(--black);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .home-hero h1 .accent { color: #000080; }
+
+        .home-hero p {
+            font-size: 14px;
+            color: var(--text-muted);
+            max-width: 500px;
+            line-height: 1.7;
+        }
+
+        .home-terminal {
+            margin: 24px 0 0;
+            background: var(--black);
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 16px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff41;
+            max-width: 500px;
+        }
+
+        .home-terminal .prompt { color: var(--blue); }
+        .home-terminal .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background: #00ff41;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .home-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .home-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .home-card:hover {
+            border-color: #000080;
+            box-shadow: 0 2px 8px rgba(0,0,128,0.1);
+        }
+
+        .home-card h3 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            margin-bottom: 8px;
+            color: var(--black);
+        }
+
+        .home-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .home-card .card-count {
+            display: inline-block;
+            margin-top: 10px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 7px;
+            padding: 3px 8px;
+            background: #000080;
+            color: white;
+            border-radius: 2px;
+        }
+
+        /* ── Essays Section ── */
+        .section-header {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section-header h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 14px;
+            color: var(--black);
+            margin-bottom: 6px;
+        }
+
+        .section-header p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .essay-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .essay-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 30px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.1s;
+        }
+
+        .essay-item:hover {
+            background: rgba(0, 120, 215, 0.04);
+        }
+
+        .essay-link {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .essay-link:hover {
+            color: #000080;
+        }
+
+        .essay-date {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 7px;
+            color: var(--gray);
+            flex-shrink: 0;
+            margin-left: 20px;
+        }
+
+        /* ── Products Section ── */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+            padding: 30px;
+        }
+
+        .product-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            transition: all 0.15s;
+        }
+
+        .product-card:hover {
+            border-color: var(--blue);
+        }
+
+        .product-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .product-name {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            margin-bottom: 8px;
+        }
+
+        .product-name a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .product-name a:hover { color: var(--blue); }
+
+        .product-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ── Bookmarks Section ── */
+        .bookmarks-hero {
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(0,0,128,0.04) 0%, transparent 60%);
+            border-bottom: 1px solid #ddd;
+        }
+
+        .bookmarks-hero h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 20px;
+            color: var(--black);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .bookmarks-hero p {
+            font-size: 14px;
+            color: var(--text-muted);
+            max-width: 500px;
+            line-height: 1.7;
+        }
+
+        .bookmarks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .bookmark-category {
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            transition: all 0.15s;
+        }
+
+        .bookmark-category:hover {
+            border-color: #000080;
+            box-shadow: 0 2px 8px rgba(0,0,128,0.1);
+        }
+
+        .bookmark-category h2 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            color: var(--blue);
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .bookmark-category ul {
+            list-style: none;
+        }
+
+        .bookmark-category li {
+            padding: 6px 0;
+            border-bottom: 1px solid #f8f8f8;
+        }
+
+        .bookmark-category li:last-child {
+            border-bottom: none;
+        }
+
+        .bookmark-category a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.1s;
+        }
+
+        .bookmark-category a:hover {
+            color: #000080;
+        }
+
+        .bookmark-category .bk-ico {
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* ── About Section ── */
+        .about-hero {
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(0,0,128,0.04) 0%, transparent 60%);
+            border-bottom: 1px solid #ddd;
+        }
+
+        .about-hero h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 20px;
+            color: var(--black);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .about-hero p {
+            font-size: 14px;
+            color: var(--text-muted);
+            max-width: 500px;
+            line-height: 1.7;
+        }
+
+        .about-terminal {
+            margin: 24px 0 0;
+            background: var(--black);
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 16px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff41;
+            max-width: 500px;
+        }
+
+        .about-terminal .prompt { color: var(--blue); }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .about-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            transition: all 0.15s;
+        }
+
+        .about-card:hover {
+            border-color: #000080;
+            box-shadow: 0 2px 8px rgba(0,0,128,0.1);
+        }
+
+        .about-card h3 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            margin-bottom: 8px;
+            color: var(--black);
+        }
+
+        .about-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .about-card .about-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 7px;
+            padding: 3px 8px;
+            background: #000080;
+            color: white;
+            border-radius: 2px;
+            text-decoration: none;
+            transition: background 0.1s;
+        }
+
+        .about-card .about-link:hover {
+            background: #003580;
+        }
+
+        .about-card ul {
+            list-style: none;
+        }
+
+        .about-card li {
+            padding: 5px 0;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .about-card li a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .about-card li a:hover {
+            color: #000080;
+        }
+
+        /* ── Status Window (floating) ── */
+        .status-window {
+            top: 60px;
+            right: 30px;
+            width: 220px;
+            z-index: 5;
+        }
+
+        .status-window .window-body {
+            padding: 12px;
+            font-size: 12px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .status-item:last-child { border-bottom: none; }
+
+        .status-label { color: var(--text-muted); font-size: 11px; }
+        .status-value {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 7px;
+            color: #000080;
+        }
+
+        /* ── Taskbar ── */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: #c0c0c0;
+            border-top: 2px solid #dfdfdf;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            z-index: 9999;
+            gap: 4px;
+        }
+
+        .start-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 8px;
+            background: #c0c0c0;
+            color: #000;
+            border: none;
+            border-top: 2px solid #dfdfdf;
+            border-left: 2px solid #dfdfdf;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            cursor: pointer;
+            height: 24px;
+            font-weight: bold;
+        }
+
+        .start-btn:active {
+            border-top: 2px solid #404040;
+            border-left: 2px solid #404040;
+            border-right: 2px solid #dfdfdf;
+            border-bottom: 2px solid #dfdfdf;
+        }
+
+        .taskbar-divider {
+            width: 2px;
+            height: 22px;
+            border-left: 1px solid #808080;
+            border-right: 1px solid #dfdfdf;
+            margin: 0 4px;
+        }
+
+        .taskbar-items {
+            flex: 1;
+            display: flex;
+            gap: 4px;
+            overflow: hidden;
+        }
+
+        .taskbar-item {
+            padding: 2px 8px;
+            font-size: 11px;
+            background: #c0c0c0;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-top: 1px solid #404040;
+            border-left: 1px solid #404040;
+            border-right: 1px solid #dfdfdf;
+            border-bottom: 1px solid #dfdfdf;
+        }
+
+        .taskbar-item.active {
+            border-top: 1px solid #404040;
+            border-left: 1px solid #404040;
+            border-right: 1px solid #dfdfdf;
+            border-bottom: 1px solid #dfdfdf;
+        }
+
+        .taskbar-clock {
+            padding: 2px 8px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            color: #000;
+            border-top: 1px solid #404040;
+            border-left: 1px solid #404040;
+            border-right: 1px solid #dfdfdf;
+            border-bottom: 1px solid #dfdfdf;
+            height: 22px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* ── Toast / notification ── */
+        .toast {
+            position: fixed;
+            bottom: 50px;
+            right: 16px;
+            background: var(--black);
+            color: #00ff41;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            padding: 10px 16px;
+            border: 1px solid var(--blue);
+            border-radius: 2px;
+            z-index: 10000;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Scrollbar ── */
+        .content-area::-webkit-scrollbar { width: 12px; }
+        .content-area::-webkit-scrollbar-track { background: #f0f0f0; }
+        .content-area::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border: 1px solid #a0a0a0;
+        }
+        .content-area::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .main-window {
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: calc(100vh - 40px);
+                border-radius: 0;
+            }
+            .sidebar { width: 160px; }
+            .home-grid, .bookmarks-grid, .about-grid { grid-template-columns: 1fr; }
+            .home-hero h1, .bookmarks-hero h1, .about-hero h1 { font-size: 14px; }
+            .status-window { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                position: absolute;
+                left: -160px;
+                top: 0;
+                bottom: 0;
+                z-index: 100;
+                transition: left 0.2s;
+            }
+            .sidebar.open { left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="desktop">
+
+        <!-- Main Window -->
+        <div class="window main-window" id="main-window">
+            <div class="window-header" id="main-header">
+                <div class="window-header-title">
+                    <span id="window-icon" class="nav-ico ico-computer" style="width:16px;height:16px;"></span>
+                    <span id="content-title">khabib.exe</span>
+                </div>
+                <div class="window-controls">
+                    <button class="window-ctrl" title="Minimize">─</button>
+                    <button class="window-ctrl" title="Maximize">□</button>
+                    <button class="window-ctrl close" title="Close">×</button>
+                </div>
+            </div>
+
+            <div class="window-body">
+                <div class="main-layout">
+                    <!-- Sidebar Nav -->
+                    <div class="sidebar" id="sidebar">
+                        <div class="sidebar-header">
+                            <h2>khabib</h2>
+                            <p>Essays, products, and random thoughts</p>
+                        </div>
+                        <ul class="nav-list">
+                            <li class="nav-item active" data-section="home" onclick="navigateTo('home')">
+                                <span class="nav-ico ico-home"></span> Home
+                            </li>
+                            <li class="nav-item" data-section="essays" onclick="navigateTo('essays')">
+                                <span class="nav-ico ico-essays"></span> Essays
+                            </li>
+                            <li class="nav-item" data-section="products" onclick="navigateTo('products')">
+                                <span class="nav-ico ico-products"></span> Products
+                            </li>
+                            <li class="nav-item" data-section="bookmarks" onclick="navigateTo('bookmarks')">
+                                <span class="nav-ico ico-bookmarks"></span> Bookmarks
+                            </li>
+                            <li class="nav-item" data-section="about" onclick="navigateTo('about')">
+                                <span class="nav-ico ico-about"></span> About
+                            </li>
+                        </ul>
+                        <div class="sidebar-footer">
+                            v1.0 &middot; March 19, 2026
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="content-area">
+
+                        <!-- Home -->
+                        <div id="home" class="section active">
+                            <div class="home-hero">
+                                <h1>Hello, I'm <span class="accent">khabib</span>.</h1>
+                                <p>Essays, products, and random thoughts</p>
+                                <div class="home-terminal">
+                                    <div><span class="prompt">C:\Users\khabib&gt;</span> whoami</div>
+                                    <div>builder, writer, tinkerer</div>
+                                    <div><span class="prompt">C:\Users\khabib&gt;</span> <span class="cursor"></span></div>
+                                </div>
+                            </div>
+                            <div class="home-grid">
+                                <div class="home-card" onclick="navigateTo('essays')">
+                                    <span class="nav-ico ico-essays" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
+                                    <h3>ESSAYS</h3>
+                                    <p>Long-form thoughts on technology, life, and everything in between.</p>
+                                    <span class="card-count">READ</span>
+                                </div>
+                                <div class="home-card" onclick="navigateTo('products')">
+                                    <span class="nav-ico ico-products" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
+                                    <h3>PRODUCTS</h3>
+                                    <p>Things I've built and shipped into the world.</p>
+                                    <span class="card-count">EXPLORE</span>
+                                </div>
+                                <div class="home-card" onclick="navigateTo('bookmarks')">
+                                    <span class="nav-ico ico-bookmarks" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
+                                    <h3>BOOKMARKS</h3>
+                                    <p>Links I find interesting and worth sharing.</p>
+                                    <span class="card-count">BROWSE</span>
+                                </div>
+                                <div class="home-card" onclick="navigateTo('about')">
+                                    <span class="nav-ico ico-about" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
+                                    <h3>ABOUT</h3>
+                                    <p>Who I am and what I'm working on.</p>
+                                    <span class="card-count">INFO</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Essays -->
+                        <div id="essays" class="section">
+                            <div class="section-header">
+                                <h1>ESSAYS</h1>
+                                <p>Long-form thoughts on technology, life, and everything in between.</p>
+                            </div>
+                            <ul class="essay-list">
+                                <li class="essay-item">
+            <a href="essay-why-simple-things-are-hard.html" class="essay-link">Why Simple Things Are Hard</a>
+            <span class="essay-date">February 2026</span>
+        </li>
+<li class="essay-item">
+            <a href="essay-the-art-of-doing-nothing.html" class="essay-link">The Art of Doing Nothing</a>
+            <span class="essay-date">January 2026</span>
+        </li>
+                            </ul>
+                        </div>
+
+                        <!-- Products -->
+                        <div id="products" class="section">
+                            <div class="section-header">
+                                <h1>PRODUCTS</h1>
+                                <p>Things I've built and shipped.</p>
+                            </div>
+                            <div class="product-grid">
+                                <div class="product-card win95-outset">
+            <div class="product-icon">⚡</div>
+            <div class="product-name"><a href="product-minimal-blog-engine.html" class="essay-link">Minimal Blog Engine</a></div>
+            <div class="product-desc">A static site generator in 500 lines. No dependencies. No magic.</div>
+        </div>
+                            </div>
+                        </div>
+
+                        <!-- Bookmarks -->
+                        <div id="bookmarks" class="section">
+                            <div class="bookmarks-hero">
+                                <h1>Bookmarks</h1>
+                                <p>Links I find interesting and worth sharing.</p>
+                            </div>
+                            <div class="bookmarks-grid">
+                                <div class="bookmark-category">
+                                    <h2>READING</h2>
+                                    <ul>
+                                        <li><a href="http://paulgraham.com"><span class="bk-ico">📄</span> Paul Graham's Essays</a></li>
+                                        <li><a href="https://gwern.net"><span class="bk-ico">🔬</span> Gwern.net</a></li>
+                                        <li><a href="https://news.ycombinator.com"><span class="bk-ico">📰</span> Hacker News</a></li>
+                                    </ul>
+                                </div>
+                                <div class="bookmark-category">
+                                    <h2>TOOLS</h2>
+                                    <ul>
+                                        <li><a href="https://github.com"><span class="bk-ico">💻</span> GitHub</a></li>
+                                        <li><a href="https://figma.com"><span class="bk-ico">🎨</span> Figma</a></li>
+                                        <li><a href="https://claude.ai"><span class="bk-ico">🤖</span> Claude</a></li>
+                                    </ul>
+                                </div>
+                                <div class="bookmark-category">
+                                    <h2>INSPIRATION</h2>
+                                    <ul>
+                                        <li><a href="https://brutalistwebsites.com"><span class="bk-ico">🏗️</span> Brutalist Websites</a></li>
+                                        <li><a href="https://www.are.na"><span class="bk-ico">📌</span> Are.na</a></li>
+                                        <li><a href="https://dribbble.com"><span class="bk-ico">🎯</span> Dribbble</a></li>
+                                    </ul>
+                                </div>
+                                <div class="bookmark-category">
+                                    <h2>LEARNING</h2>
+                                    <ul>
+                                        <li><a href="https://www.coursera.org"><span class="bk-ico">🎓</span> Coursera</a></li>
+                                        <li><a href="https://roadmap.sh"><span class="bk-ico">🗺️</span> Roadmap.sh</a></li>
+                                        <li><a href="https://web.dev"><span class="bk-ico">🌐</span> web.dev</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- About -->
+                        <div id="about" class="section">
+                            <div class="about-hero">
+                                <h1>About</h1>
+                                <p>Who I am and what I'm working on.</p>
+                                <div class="about-terminal">
+                                    <div><span class="prompt">C:\Users\khabib&gt;</span> cat about.txt</div>
+                                    <div>builder, writer, tinkerer</div>
+                                    <div>interested in software, design, and writing</div>
+                                    <div><span class="prompt">C:\Users\khabib&gt;</span> <span class="cursor"></span></div>
+                                </div>
+                            </div>
+                            <div class="about-grid">
+                                <div class="about-card">
+                                    <span class="nav-ico ico-about" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
+                                    <h3>WHO I AM</h3>
+                                    <p>Hi, I'm <strong>khabib</strong>. I build things on the internet. I'm interested in software, design, writing, and the intersection of all three.</p>
+                                </div>
+                                <div class="about-card">
+                                    <span class="nav-ico ico-products" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
+                                    <h3>WHAT I DO</h3>
+                                    <p>I build minimal tools that do one thing well. No bloat, no dependencies, no magic. Just simple software that works.</p>
+                                </div>
+                                <div class="about-card">
+                                    <span class="nav-ico ico-essays" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
+                                    <h3>CONTACT</h3>
+                                    <ul>
+                                        <li><a href="mailto:hello@example.com">📧 hello@example.com</a></li>
+                                        <li><a href="#">🐦 @khabib</a></li>
+                                        <li><a href="#">💻 github.com/khabib</a></li>
+                                    </ul>
+                                </div>
+                                <div class="about-card">
+                                    <span class="nav-ico ico-bookmarks" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
+                                    <h3>COLOPHON</h3>
+                                    <p>This site is built with a custom Python static site generator in ~500 lines. No frameworks, no dependencies. Styled after Windows 95.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="window-statusbar">
+                <span id="status-text">Ready</span>
+                <span id="status-section">Home</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="start-btn">
+            ⊞ START
+        </button>
+        <div class="taskbar-divider"></div>
+        <div class="taskbar-items">
+            <div class="taskbar-item active" id="taskbar-main">
+                <span class="nav-ico ico-computer" style="width:14px;height:14px;display:inline-block;vertical-align:middle;"></span> khabib.exe
+            </div>
+        </div>
+        <div class="taskbar-clock" id="clock">00:00</div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">System loaded successfully.</div>
+
+    <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+    <script>
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('.section');
+        const contentTitle = document.getElementById('content-title');
+        const statusSection = document.getElementById('status-section');
+        const windowIcon = document.getElementById('window-icon');
+
+        const sectionMeta = {
+            home:      { title: 'khabib.exe',   ico: 'ico-computer', status: 'Home' },
+            essays:    { title: 'essays.txt',            ico: 'ico-essays',   status: 'Essays' },
+            products:  { title: 'products.dat',          ico: 'ico-products', status: 'Products' },
+            bookmarks: { title: 'bookmarks.url',         ico: 'ico-bookmarks',status: 'Bookmarks' },
+            about:     { title: 'about.nfo',             ico: 'ico-about',    status: 'About' }
+        };
+
+        function navigateTo(id) {
+            navItems.forEach(n => n.classList.toggle('active', n.dataset.section === id));
+            sections.forEach(s => s.classList.toggle('active', s.id === id));
+
+            const meta = sectionMeta[id] || sectionMeta.home;
+            contentTitle.textContent = meta.title;
+            windowIcon.className = 'nav-ico ' + meta.ico;
+            windowIcon.style.width = '16px';
+            windowIcon.style.height = '16px';
+            statusSection.textContent = meta.status;
+            document.getElementById('taskbar-main').innerHTML = '<span class="nav-ico ' + meta.ico + '" style="width:14px;height:14px;display:inline-block;vertical-align:middle;"></span> ' + meta.title;
+
+            window.location.hash = id;
+        }
+
+        // Hash routing
+        function handleHash() {
+            const hash = window.location.hash.slice(1);
+            if (hash && document.getElementById(hash)) navigateTo(hash);
+        }
+        window.addEventListener('load', handleHash);
+        window.addEventListener('hashchange', handleHash);
+
+        // Clock
+        function updateClock() {
+            const now = new Date();
+            const h = now.getHours().toString().padStart(2, '0');
+            const m = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = h + ':' + m;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Boot toast
+        setTimeout(() => {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }, 500);
+    </script>
+</body>
+</html>
