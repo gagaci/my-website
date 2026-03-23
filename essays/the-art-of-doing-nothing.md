@@ -5,7 +5,7 @@ tags: [productivity, life]
 description: Why idle time is not wasted time
 ---
 
-We live in an age of relentless productivity. Every minute must be optimized. Every moment monetized. Every gap filled with podcasts, audiobooks, or "quick wins."
+We live in an era of relentless productivity. Every minute must be optimized. Every moment monetized. Every gap filled with podcasts, audiobooks, or "quick wins."
 
 I want to make a case for doing nothing.
 
