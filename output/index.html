@@ -847,6 +847,29 @@
         }
         .content-area::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
 
+        /* ── Hamburger (mobile only) ── */
+        .hamburger {
+            display: none;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 2px 6px;
+            line-height: 1;
+            border-radius: 2px;
+        }
+
+        /* ── Sidebar overlay ── */
+        .sidebar-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 99;
+        }
+        .sidebar-overlay.visible { display: block; }
+
         /* ── Responsive ── */
         @media (max-width: 768px) {
             .main-window {
@@ -855,23 +878,34 @@
                 width: 100vw;
                 height: calc(100vh - 40px);
                 border-radius: 0;
+                transform: none;
+                border: none;
             }
             .sidebar { width: 160px; }
             .home-grid, .bookmarks-grid, .about-grid { grid-template-columns: 1fr; }
             .home-hero h1, .bookmarks-hero h1, .about-hero h1 { font-size: 14px; }
             .status-window { display: none; }
+            .home-hero, .bookmarks-hero, .about-hero { padding: 24px 16px; }
+            .section-header { padding: 16px; }
+            .home-grid, .bookmarks-grid, .about-grid { padding: 16px; }
+            .essay-item { padding: 10px 16px; }
+            .product-grid { padding: 16px; }
         }
 
         @media (max-width: 480px) {
+            .hamburger { display: flex; align-items: center; }
             .sidebar {
                 position: absolute;
-                left: -160px;
+                left: -200px;
                 top: 0;
                 bottom: 0;
+                width: 200px;
                 z-index: 100;
                 transition: left 0.2s;
             }
             .sidebar.open { left: 0; }
+            .home-hero h1, .bookmarks-hero h1, .about-hero h1 { font-size: 12px; }
+            .home-terminal, .about-terminal { font-size: 11px; padding: 12px; }
         }
     </style>
 </head>
@@ -885,6 +919,7 @@
                     <span id="window-icon" class="nav-ico ico-computer" style="width:16px;height:16px;"></span>
                     <span id="content-title">khabib.exe</span>
                 </div>
+                <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
                 <div class="window-controls">
                     <button class="window-ctrl" title="Minimize">─</button>
                     <button class="window-ctrl" title="Maximize">□</button>
@@ -894,6 +929,7 @@
 
             <div class="window-body">
                 <div class="main-layout">
+                    <div class="sidebar-overlay" id="sidebar-overlay"></div>
                     <!-- Sidebar Nav -->
                     <div class="sidebar" id="sidebar">
                         <div class="sidebar-header">
@@ -918,7 +954,7 @@
                             </li>
                         </ul>
                         <div class="sidebar-footer">
-                            v1.0 &middot; March 19, 2026
+                            v1.0 &middot; March 29, 2026
                         </div>
                     </div>
 
@@ -1023,7 +1059,6 @@
                                 <div class="bookmark-category">
                                     <h2>INSPIRATION</h2>
                                     <ul>
-                                        <li><a href="https://brutalistwebsites.com"><span class="bk-ico">🏗️</span> Brutalist Websites</a></li>
                                         <li><a href="https://www.are.na"><span class="bk-ico">📌</span> Are.na</a></li>
                                         <li><a href="https://dribbble.com"><span class="bk-ico">🎯</span> Dribbble</a></li>
                                     </ul>
@@ -1055,7 +1090,7 @@
                                 <div class="about-card">
                                     <span class="nav-ico ico-about" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
                                     <h3>WHO I AM</h3>
-                                    <p>Hi, I'm <strong>khabib</strong>. I build things on the internet. I'm interested in software, design, writing, and the intersection of all three.</p>
+                                    <p>Hi, I'm khabib. I build things on the internet. I'm interested in software, design, writing, and the intersection of all three.</p>
                                 </div>
                                 <div class="about-card">
                                     <span class="nav-ico ico-products" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
@@ -1066,9 +1101,9 @@
                                     <span class="nav-ico ico-essays" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
                                     <h3>CONTACT</h3>
                                     <ul>
-                                        <li><a href="mailto:hello@example.com">📧 hello@example.com</a></li>
-                                        <li><a href="#">🐦 @khabib</a></li>
-                                        <li><a href="#">💻 github.com/khabib</a></li>
+                                        <li><a href="bayramovxabibulloh@gmail.com">📧 email </a></li>
+                                        <li><a href="https://x.com/khabibbayramov">🐦 X </a></li>
+                                        <li><a href="https://github.com/gagaci">💻 github </a></li>
                                     </ul>
                                 </div>
                                 <div class="about-card">
@@ -1124,6 +1159,25 @@
             about:     { title: 'about.nfo',             ico: 'ico-about',    status: 'About' }
         };
 
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const hamburger = document.getElementById('hamburger');
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('visible');
+        }
+
+        if (hamburger) {
+            hamburger.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('visible');
+            });
+        }
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeSidebar);
+        }
+
         function navigateTo(id) {
             navItems.forEach(n => n.classList.toggle('active', n.dataset.section === id));
             sections.forEach(s => s.classList.toggle('active', s.id === id));
@@ -1137,6 +1191,8 @@
             document.getElementById('taskbar-main').innerHTML = '<span class="nav-ico ' + meta.ico + '" style="width:14px;height:14px;display:inline-block;vertical-align:middle;"></span> ' + meta.title;
 
             window.location.hash = id;
+
+            if (window.innerWidth <= 480) closeSidebar();
         }
 
         // Hash routing
