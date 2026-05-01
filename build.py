@@ -321,10 +321,15 @@ def build_index(essays, projects, videos):
     # Generate project cards HTML
     project_cards = []
     for project in projects:
+        github_link = (
+            f'''<a href="{project['github']}" target="_blank" rel="noopener" class="project-repo">GitHub repo</a>'''
+            if project['github'] else ''
+        )
         project_cards.append(f'''<div class="project-card win95-outset">
             <div class="project-icon">{project['icon']}</div>
             <div class="project-name"><a href="{project['filename']}" class="essay-link">{project['title']}</a></div>
             <div class="project-desc">{project['tagline']}</div>
+            {github_link}
         </div>''')
     projects_html = '\n'.join(project_cards) if project_cards else '<p>No projects yet. Add .md files to the projects/ folder.</p>'
     
