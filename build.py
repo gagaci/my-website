@@ -10,7 +10,7 @@ Usage:
 
 Structure:
     essays/          → Put your .md essay files here
-    projects/        → Put your .md project files here  
+    projects/        → Put your .md project files here
     templates/       → HTML templates (don't edit unless customizing)
     output/          → Generated site (upload this to hosting)
 """
@@ -36,6 +36,7 @@ AUTHOR = "Khabib"
 BASE_DIR = Path(__file__).parent
 ESSAYS_DIR = BASE_DIR / "essays"
 PROJECTS_DIR = BASE_DIR / "projects"
+VIDEOS_DIR = BASE_DIR / "videos"
 TEMPLATES_DIR = BASE_DIR / "templates"
 OUTPUT_DIR = BASE_DIR / "output"
 
@@ -230,6 +231,33 @@ def load_projects():
     projects.sort(key=lambda x: x['title'].lower())
     return projects
 
+def load_videos():
+    """Load all videos from the videos directory."""
+    videos = []
+    if not VIDEOS_DIR.exists():
+        return videos
+
+    for md_file in VIDEOS_DIR.glob('*.md'):
+        with open(md_file, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        frontmatter, _ = parse_frontmatter(content)
+        slug = md_file.stem
+        youtube_id = frontmatter.get('youtube_id', '')
+
+        videos.append({
+            'slug': slug,
+            'title': frontmatter.get('title', slug.replace('-', ' ').title()),
+            'youtube_id': youtube_id,
+            'youtube_url': f'https://youtu.be/{youtube_id}',
+            'thumbnail_url': f'https://img.youtube.com/vi/{youtube_id}/hqdefault.jpg',
+            'description': frontmatter.get('description', ''),
+            'date': frontmatter.get('date', ''),
+        })
+
+    videos.sort(key=lambda x: x['date'], reverse=True)
+    return videos
+
 def build_essay_page(essay, essays):
     """Build a single essay HTML page."""
     # Find prev/next essays
@@ -272,7 +300,7 @@ def build_project_page(project):
         body=project['body']
     )
 
-def build_index(essays, projects):
+def build_index(essays, projects, videos):
     """Build the main index page."""
     # Generate essay list HTML
     essay_items = []
@@ -300,11 +328,39 @@ def build_index(essays, projects):
         </div>''')
     projects_html = '\n'.join(project_cards) if project_cards else '<p>No projects yet. Add .md files to the projects/ folder.</p>'
     
+    # Generate video cards HTML
+    video_cards = []
+    for video in videos:
+        date_display = video['date']
+        if date_display:
+            try:
+                dt = datetime.strptime(str(date_display), '%Y-%m-%d')
+                date_display = dt.strftime('%B %Y')
+            except:
+                pass
+        video_cards.append(f'''<div class="video-card">
+            <a href="{video['youtube_url']}" target="_blank" rel="noopener" class="video-thumbnail-link">
+                <div class="video-thumbnail">
+                    <img src="{video['thumbnail_url']}" alt="{video['title']}" loading="lazy">
+                    <div class="video-play-overlay">
+                        <div class="video-play-btn">&#9654;</div>
+                    </div>
+                </div>
+            </a>
+            <div class="video-info">
+                <div class="video-title">{video['title']}</div>
+                <div class="video-desc">{video['description']}</div>
+                <div class="video-date">{date_display}</div>
+            </div>
+        </div>''')
+    videos_html = '\n'.join(video_cards) if video_cards else '<p class="video-empty">No videos yet. Add .md files to the videos/ folder.</p>'
+
     return render_template('index.html',
         site_name=SITE_NAME,
         site_description=SITE_DESCRIPTION,
         essays_list=essays_html,
         projects_grid=projects_html,
+        videos_list=videos_html,
         current_date=datetime.now().strftime('%B %d, %Y')
     )
 
@@ -321,9 +377,11 @@ def build_site():
     # Load content
     essays = load_essays()
     projects = load_projects()
+     videos = load_videos()
     
     print(f"📄 Found {len(essays)} essays")
     print(f"📦 Found {len(projects)} projects")
+     print(f"🎬 Found {len(videos)} videos")
     
     # Build essay pages
     for essay in essays:
@@ -342,7 +400,7 @@ def build_site():
         print(f"   ✓ {project['filename']}")
     
     # Build index page
-    index_html = build_index(essays, projects)
+    index_html = build_index(essays, projects,videos )
     with open(OUTPUT_DIR / 'index.html', 'w', encoding='utf-8') as f:
         f.write(index_html)
     print(f"   ✓ index.html")
@@ -377,6 +435,7 @@ if __name__ == '__main__':
     # Create directories if they don't exist
     ESSAYS_DIR.mkdir(exist_ok=True)
     PROJECTS_DIR.mkdir(exist_ok=True)
+    VIDEOS_DIR.mkdir(exist_ok=True)
     TEMPLATES_DIR.mkdir(exist_ok=True)
     
     # Build the site

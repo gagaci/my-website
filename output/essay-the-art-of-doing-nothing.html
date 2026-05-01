@@ -349,6 +349,14 @@
             .window { max-width: 100%; height: calc(100vh - 40px); border-radius: 0; border: none; }
             .essay-header, .essay-body, .essay-footer { padding-left: 20px; padding-right: 20px; }
             .essay-title { font-size: 11px; }
+            .window-body { padding-bottom: 0; }
+        }
+
+        @media (max-width: 480px) {
+            .essay-header { padding: 16px; }
+            .essay-body { padding: 16px 16px 24px; font-size: 14px; }
+            .essay-footer { padding: 16px; flex-direction: column; gap: 12px; align-items: flex-start; }
+            .essay-title { font-size: 10px; }
         }
     </style>
 </head>

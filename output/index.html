@@ -289,6 +289,10 @@
             background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Ccircle cx='16' cy='10' r='6' fill='%23ffcc99'/%3E%3Ccircle cx='16' cy='10' r='6' fill='none' stroke='%23806040' stroke-width='1'/%3E%3Crect x='8' y='16' width='16' height='14' rx='2' fill='%230000aa'/%3E%3Crect x='8' y='16' width='16' height='1' fill='%230000cc'/%3E%3Crect x='8' y='16' width='1' height='14' fill='%230000cc'/%3E%3Crect x='23' y='16' width='1' height='14' fill='%23000066'/%3E%3Crect x='12' y='18' width='8' height='1' fill='%23fff'/%3E%3Crect x='14' y='20' width='4' height='1' fill='%23fff'/%3E%3C/svg%3E") no-repeat center/contain;
         }
 
+        .ico-videos {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='2' y='4' width='28' height='20' fill='%23c0c0c0'/%3E%3Crect x='2' y='4' width='28' height='1' fill='%23fff'/%3E%3Crect x='2' y='4' width='1' height='20' fill='%23fff'/%3E%3Crect x='29' y='4' width='1' height='20' fill='%23808080'/%3E%3Crect x='2' y='23' width='28' height='1' fill='%23808080'/%3E%3Crect x='4' y='6' width='24' height='16' fill='%23000080'/%3E%3Crect x='5' y='7' width='22' height='14' fill='%230000aa'/%3E%3Crect x='11' y='24' width='10' height='2' fill='%23c0c0c0'/%3E%3Crect x='8' y='26' width='16' height='2' fill='%23c0c0c0'/%3E%3Cpolygon points='13,10 13,18 21,14' fill='%23ffffff'/%3E%3C/svg%3E") no-repeat center/contain;
+        }
+
         .ico-computer {
             background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='2' y='2' width='28' height='20' fill='%23c0c0c0'/%3E%3Crect x='2' y='2' width='28' height='1' fill='%23fff'/%3E%3Crect x='2' y='2' width='1' height='20' fill='%23fff'/%3E%3Crect x='29' y='2' width='1' height='20' fill='%23808080'/%3E%3Crect x='2' y='21' width='28' height='1' fill='%23808080'/%3E%3Crect x='4' y='4' width='24' height='16' fill='%23000080'/%3E%3Crect x='6' y='6' width='20' height='12' fill='%2300aaaa'/%3E%3Crect x='10' y='23' width='12' height='3' fill='%23c0c0c0'/%3E%3Crect x='10' y='23' width='12' height='1' fill='%23fff'/%3E%3Crect x='6' y='26' width='20' height='4' fill='%23c0c0c0'/%3E%3Crect x='6' y='26' width='20' height='1' fill='%23fff'/%3E%3Crect x='6' y='26' width='1' height='4' fill='%23fff'/%3E%3Crect x='25' y='26' width='1' height='4' fill='%23808080'/%3E%3Crect x='6' y='29' width='20' height='1' fill='%23808080'/%3E%3C/svg%3E") no-repeat center/contain;
         }
@@ -689,6 +693,120 @@
             color: #000080;
         }
 
+        /* ── Videos Section ── */
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .video-card {
+            display: flex;
+            gap: 20px;
+            padding: 20px 30px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.1s;
+            align-items: flex-start;
+        }
+
+        .video-card:hover {
+            background: rgba(0, 0, 128, 0.03);
+        }
+
+        .video-thumbnail-link {
+            display: block;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+
+        .video-thumbnail {
+            position: relative;
+            width: 200px;
+            height: 112px;
+            overflow: hidden;
+            border: 2px solid #808080;
+            border-top-color: #404040;
+            border-left-color: #404040;
+            border-right-color: #dfdfdf;
+            border-bottom-color: #dfdfdf;
+            background: #000080;
+            flex-shrink: 0;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 128, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .video-thumbnail-link:hover .video-play-overlay {
+            opacity: 1;
+        }
+
+        .video-play-btn {
+            width: 40px;
+            height: 40px;
+            background: #c0c0c0;
+            border-top: 2px solid #dfdfdf;
+            border-left: 2px solid #dfdfdf;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #000080;
+            font-family: 'Press Start 2P', monospace;
+            line-height: 1;
+            padding-left: 3px;
+        }
+
+        .video-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .video-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        .video-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .video-date {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 7px;
+            color: var(--gray);
+        }
+
+        .video-empty {
+            padding: 30px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
         /* ── Status Window (floating) ── */
         .status-window {
             top: 60px;
@@ -847,31 +965,69 @@
         }
         .content-area::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
 
+        /* ── Hamburger (mobile only) ── */
+        .hamburger {
+            display: none;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 2px 6px;
+            line-height: 1;
+            border-radius: 2px;
+        }
+
+        /* ── Sidebar overlay ── */
+        .sidebar-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 99;
+        }
+        .sidebar-overlay.visible { display: block; }
+
         /* ── Responsive ── */
         @media (max-width: 768px) {
             .main-window {
                 top: 0;
                 left: 0;
                 width: 100vw;
+                max-width: 100vw;
                 height: calc(100vh - 40px);
+                max-height: calc(100vh - 40px);
                 border-radius: 0;
+                transform: none;
+                border: none;
             }
             .sidebar { width: 160px; }
             .home-grid, .bookmarks-grid, .about-grid { grid-template-columns: 1fr; }
             .home-hero h1, .bookmarks-hero h1, .about-hero h1 { font-size: 14px; }
             .status-window { display: none; }
+            .home-hero, .bookmarks-hero, .about-hero { padding: 24px 16px; }
+            .section-header { padding: 16px; }
+            .home-grid, .bookmarks-grid, .about-grid { padding: 16px; }
+            .essay-item { padding: 10px 16px; }
+            .product-grid { padding: 16px; }
+            .video-card { flex-direction: column; padding: 16px; }
+            .video-thumbnail { width: 100%; height: auto; aspect-ratio: 16/9; }
         }
 
         @media (max-width: 480px) {
+            .hamburger { display: flex; align-items: center; }
             .sidebar {
                 position: absolute;
-                left: -160px;
+                left: -200px;
                 top: 0;
                 bottom: 0;
+                width: 200px;
                 z-index: 100;
                 transition: left 0.2s;
             }
             .sidebar.open { left: 0; }
+            .home-hero h1, .bookmarks-hero h1, .about-hero h1 { font-size: 12px; }
+            .home-terminal, .about-terminal { font-size: 11px; padding: 12px; }
         }
     </style>
 </head>
@@ -885,6 +1041,7 @@
                     <span id="window-icon" class="nav-ico ico-computer" style="width:16px;height:16px;"></span>
                     <span id="content-title">khabib.exe</span>
                 </div>
+                <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
                 <div class="window-controls">
                     <button class="window-ctrl" title="Minimize">─</button>
                     <button class="window-ctrl" title="Maximize">□</button>
@@ -894,6 +1051,7 @@
 
             <div class="window-body">
                 <div class="main-layout">
+                    <div class="sidebar-overlay" id="sidebar-overlay"></div>
                     <!-- Sidebar Nav -->
                     <div class="sidebar" id="sidebar">
                         <div class="sidebar-header">
@@ -915,6 +1073,9 @@
                             </li>
                             <li class="nav-item" data-section="about" onclick="navigateTo('about')">
                                 <span class="nav-ico ico-about"></span> About
+                            </li>
+                            <li class="nav-item" data-section="videos" onclick="navigateTo('videos')">
+                                <span class="nav-ico ico-videos"></span> Videos
                             </li>
                         </ul>
                         <div class="sidebar-footer">
@@ -960,6 +1121,12 @@
                                     <h3>ABOUT</h3>
                                     <p>Who I am and what I'm working on.</p>
                                     <span class="card-count">INFO</span>
+                                </div>
+                                <div class="home-card" onclick="navigateTo('videos')">
+                                    <span class="nav-ico ico-videos" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
+                                    <h3>VIDEOS</h3>
+                                    <p>Videos I've made and published on YouTube.</p>
+                                    <span class="card-count">WATCH</span>
                                 </div>
                             </div>
                         </div>
@@ -1033,6 +1200,7 @@
                                 <div class="bookmark-category">
                                     <h2>INSPIRATION</h2>
                                     <ul>
+                                        <li><a href="https://brutalistwebsites.com"><span class="bk-ico">🏗️</span> Brutalist Websites</a></li>
                                         <li><a href="https://www.are.na"><span class="bk-ico">📌</span> Are.na</a></li>
                                         <li><a href="https://dribbble.com"><span class="bk-ico">🎯</span> Dribbble</a></li>
                                     </ul>
@@ -1088,6 +1256,31 @@
                             </div>
                         </div>
 
+                        <!-- Videos -->
+                        <div id="videos" class="section">
+                            <div class="section-header">
+                                <h1>VIDEOS</h1>
+                                <p>Videos I've made and published.</p>
+                            </div>
+                            <div class="video-list">
+                                <div class="video-card">
+            <a href="https://youtu.be/R5Z3OQLln0U" target="_blank" rel="noopener" class="video-thumbnail-link">
+                <div class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/R5Z3OQLln0U/hqdefault.jpg" alt="explanation of 'me too' meme from my pov" loading="lazy">
+                    <div class="video-play-overlay">
+                        <div class="video-play-btn">&#9654;</div>
+                    </div>
+                </div>
+            </a>
+            <div class="video-info">
+                <div class="video-title">explanation of 'me too' meme from my pov</div>
+                <div class="video-desc">the video explores the topics of mutual understanding and empathy in general [in uzbek]</div>
+                <div class="video-date">April 2026</div>
+            </div>
+        </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -1130,8 +1323,28 @@
             essays:    { title: 'essays.txt',            ico: 'ico-essays',   status: 'Essays' },
             projects:  { title: 'projects.dat',          ico: 'ico-projects', status: 'Projects' },
             bookmarks: { title: 'bookmarks.url',         ico: 'ico-bookmarks',status: 'Bookmarks' },
-            about:     { title: 'about.nfo',             ico: 'ico-about',    status: 'About' }
+            about:     { title: 'about.nfo',             ico: 'ico-about',    status: 'About' },
+            videos:    { title: 'videos.avi',            ico: 'ico-videos',   status: 'Videos' }
         };
+
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const hamburger = document.getElementById('hamburger');
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('visible');
+        }
+
+        if (hamburger) {
+            hamburger.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('visible');
+            });
+        }
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeSidebar);
+        }
 
         function navigateTo(id) {
             navItems.forEach(n => n.classList.toggle('active', n.dataset.section === id));
@@ -1146,6 +1359,8 @@
             document.getElementById('taskbar-main').innerHTML = '<span class="nav-ico ' + meta.ico + '" style="width:14px;height:14px;display:inline-block;vertical-align:middle;"></span> ' + meta.title;
 
             window.location.hash = id;
+
+            if (window.innerWidth <= 480) closeSidebar();
         }
 
         // Hash routing
