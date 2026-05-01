@@ -377,11 +377,11 @@ def build_site():
     # Load content
     essays = load_essays()
     projects = load_projects()
-     videos = load_videos()
+    videos = load_videos()
     
     print(f"📄 Found {len(essays)} essays")
     print(f"📦 Found {len(projects)} projects")
-     print(f"🎬 Found {len(videos)} videos")
+    print(f"🎬 Found {len(videos)} videos")
     
     # Build essay pages
     for essay in essays:
