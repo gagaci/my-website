@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Art of Doing Nothing - khabib</title>
+    <title>Webster Bot - khabib</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -90,8 +90,8 @@
 
         .nav-ico { image-rendering: pixelated; display: inline-block; }
 
-        .ico-essays {
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='4' y='2' width='20' height='28' fill='%23fff'/%3E%3Crect x='4' y='2' width='20' height='1' fill='%23fff'/%3E%3Crect x='4' y='2' width='1' height='28' fill='%23dfdfdf'/%3E%3Crect x='23' y='2' width='1' height='28' fill='%23808080'/%3E%3Crect x='4' y='29' width='20' height='1' fill='%23808080'/%3E%3Crect x='24' y='2' width='4' height='4' fill='%23c0c0c0'/%3E%3Cline x1='24' y1='2' x2='28' y2='6' stroke='%23808080' stroke-width='1'/%3E%3Crect x='7' y='8' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='11' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='14' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='17' width='10' height='1' fill='%23000080'/%3E%3Crect x='7' y='20' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='23' width='8' height='1' fill='%23000080'/%3E%3C/svg%3E") no-repeat center/contain;
+        .ico-projects {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='3' y='8' width='26' height='20' fill='%23c09050'/%3E%3Crect x='3' y='8' width='26' height='1' fill='%23e0c090'/%3E%3Crect x='3' y='8' width='1' height='20' fill='%23e0c090'/%3E%3Crect x='28' y='8' width='1' height='20' fill='%23806030'/%3E%3Crect x='3' y='27' width='26' height='1' fill='%23806030'/%3E%3Crect x='3' y='8' width='26' height='5' fill='%23d0a060'/%3E%3Crect x='3' y='12' width='26' height='1' fill='%23806030'/%3E%3Crect x='12' y='6' width='8' height='4' fill='%23d0a060'/%3E%3Crect x='12' y='6' width='8' height='1' fill='%23e0c090'/%3E%3Crect x='12' y='6' width='1' height='4' fill='%23e0c090'/%3E%3Crect x='19' y='6' width='1' height='4' fill='%23806030'/%3E%3Crect x='14' y='14' width='4' height='3' fill='%23e0c090'/%3E%3C/svg%3E") no-repeat center/contain;
         }
 
         .window-controls { display: flex; gap: 4px; }
@@ -145,7 +145,8 @@
         }
 
         .btn:hover { border-color: var(--blue); color: var(--blue); }
-        .btn:disabled { color: var(--gray); cursor: default; }
+        .btn.primary { background: var(--blue); color: white; border-color: var(--blue); }
+        .btn.primary:hover { background: #006abc; }
 
         .window-body {
             flex: 1;
@@ -153,80 +154,104 @@
             background: white;
         }
 
-        /* ── Essay Content ── */
-        .essay-header {
-            padding: 40px 40px 30px;
+        /* ── Project Header ── */
+        .project-header {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            padding: 30px;
             border-bottom: 1px solid #eee;
+            background: linear-gradient(135deg, rgba(0,120,215,0.03) 0%, transparent 60%);
         }
 
-        .essay-title {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 14px;
-            color: var(--black);
-            margin-bottom: 12px;
-            line-height: 1.8;
+        .project-icon-large {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            flex-shrink: 0;
         }
 
-        .essay-meta {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .essay-meta a { color: var(--blue); text-decoration: none; }
-        .essay-meta a:hover { text-decoration: underline; }
-
-        .essay-body {
-            padding: 30px 40px 40px;
-            font-size: 15px;
-            line-height: 1.9;
-            color: var(--text);
-            max-width: 65ch;
-        }
-
-        .essay-body p { margin-bottom: 20px; }
-
-        .essay-body h1 {
+        .project-info h1 {
             font-family: 'Press Start 2P', monospace;
             font-size: 12px;
-            color: var(--black);
-            margin: 32px 0 16px;
+            margin-bottom: 8px;
             line-height: 1.6;
         }
 
-        .essay-body h2 {
+        .project-tagline {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .project-badges { display: flex; gap: 6px; }
+
+        .badge {
+            padding: 3px 10px;
             font-family: 'Press Start 2P', monospace;
-            font-size: 10px;
+            font-size: 7px;
+            border-radius: 2px;
+            border: 1px solid;
+        }
+
+        .badge.green {
+            background: rgba(0, 128, 0, 0.1);
+            color: #008000;
+            border-color: #008000;
+        }
+
+        .badge.blue {
+            background: rgba(0, 120, 215, 0.1);
             color: var(--blue);
+            border-color: var(--blue);
+        }
+
+        /* ── Project Body ── */
+        .project-body {
+            padding: 30px;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .project-body h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 11px;
+            color: var(--black);
             margin: 28px 0 14px;
             line-height: 1.6;
         }
 
-        .essay-body h3 {
+        .project-body h1:first-child { margin-top: 0; }
+
+        .project-body h2 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            color: var(--blue);
+            margin: 24px 0 12px;
+            line-height: 1.6;
+        }
+
+        .project-body h3 {
             font-size: 15px;
             font-weight: 600;
-            color: var(--text);
-            margin: 24px 0 12px;
+            margin: 20px 0 10px;
         }
 
-        .essay-body blockquote {
-            margin: 24px 0;
-            padding: 16px 20px;
-            border-left: 3px solid var(--blue);
-            background: #f8f9fa;
-            font-style: italic;
-            color: var(--text-muted);
-        }
+        .project-body p { margin-bottom: 16px; }
 
-        .essay-body ul, .essay-body ol {
-            margin: 16px 0 16px 24px;
-        }
+        .project-body ul, .project-body ol { margin: 14px 0 14px 24px; }
+        .project-body li { margin-bottom: 6px; }
 
-        .essay-body li { margin-bottom: 8px; }
+        .project-body a { color: var(--blue); text-decoration: underline; }
+        .project-body a:hover { color: #005a9e; }
 
-        .essay-body a { color: var(--blue); text-decoration: underline; }
-        .essay-body a:hover { color: #005a9e; }
-
-        .essay-body code {
+        .project-body code {
             background: #f0f0f0;
             padding: 2px 6px;
             font-family: 'Courier New', monospace;
@@ -235,7 +260,7 @@
             border-radius: 2px;
         }
 
-        .essay-body .code-block {
+        .project-body .code-block {
             background: var(--black);
             color: #00ff41;
             padding: 20px;
@@ -248,25 +273,19 @@
             border-radius: 4px;
         }
 
-        .essay-footer {
-            padding: 24px 40px;
-            border-top: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .essay-footer p {
-            font-size: 13px;
+        .project-body blockquote {
+            margin: 20px 0;
+            padding: 16px 20px;
+            border-left: 3px solid var(--blue);
+            background: #f8f9fa;
+            font-style: italic;
             color: var(--text-muted);
         }
 
-        .share-buttons { display: flex; gap: 6px; }
-
         .window-statusbar {
             padding: 3px 10px;
-            background: #e0e0e0;
-            border-top: 1px solid #ccc;
+            background: #c0c0c0;
+            border-top: 1px solid #808080;
             font-size: 11px;
             color: var(--text-muted);
         }
@@ -310,22 +329,21 @@
         .taskbar-items { flex: 1; display: flex; gap: 4px; overflow: hidden; }
 
         .taskbar-item {
-            padding: 4px 10px;
+            padding: 2px 8px;
             font-size: 11px;
-            background: white;
             border-top: 1px solid #404040;
             border-left: 1px solid #404040;
             border-right: 1px solid #dfdfdf;
             border-bottom: 1px solid #dfdfdf;
             background: #c0c0c0;
-            height: 28px;
+            height: 22px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
         .taskbar-clock {
-            padding: 4px 10px;
+            padding: 2px 8px;
             font-family: 'Press Start 2P', monospace;
             font-size: 8px;
             color: #000;
@@ -333,12 +351,13 @@
             border-left: 1px solid #404040;
             border-right: 1px solid #dfdfdf;
             border-bottom: 1px solid #dfdfdf;
-            height: 22px;
+            border-radius: 2px;
+            background: white;
+            height: 28px;
             display: flex;
             align-items: center;
         }
 
-        /* ── Scrollbar ── */
         .window-body::-webkit-scrollbar { width: 12px; }
         .window-body::-webkit-scrollbar-track { background: #f0f0f0; }
         .window-body::-webkit-scrollbar-thumb { background: #c0c0c0; border: 1px solid #a0a0a0; }
@@ -347,8 +366,8 @@
         @media (max-width: 768px) {
             .desktop { padding: 0 0 40px; }
             .window { max-width: 100%; height: calc(100vh - 40px); border-radius: 0; border: none; }
-            .essay-header, .essay-body, .essay-footer { padding-left: 20px; padding-right: 20px; }
-            .essay-title { font-size: 11px; }
+            .project-header, .project-body { padding: 20px; }
+            .project-header { flex-direction: column; }
         }
     </style>
 </head>
@@ -357,8 +376,8 @@
         <div class="window">
             <div class="window-header">
                 <div class="window-header-title">
-                    <span class="nav-ico ico-essays" style="width:16px;height:16px;"></span>
-                    <span>The Art of Doing Nothing — notepad.exe</span>
+                    <span class="nav-ico ico-projects" style="width:16px;height:16px;"></span>
+                    <span>Webster Bot — explorer.exe</span>
                 </div>
                 <div class="window-controls">
                     <button class="window-ctrl">─</button>
@@ -368,55 +387,37 @@
             </div>
 
             <div class="window-body">
-                <div class="essay-header">
-                    <h1 class="essay-title">The Art of Doing Nothing</h1>
-                    <div class="essay-meta">January 2026 · <a href="index.html#essays">Essays</a></div>
-                </div>
-
-                <div class="essay-body">
-                    <p>We live in an era of relentless productivity. Every minute must be optimized. Every moment monetized. Every gap filled with podcasts, audiobooks, or "quick wins."</p>
-
-<p>I want to make a case for doing nothing.</p>
-
-<h2>The Cult of Busy</h2>
-
-<p>Somewhere along the way, being busy became a status symbol. "How are you?" "Busy!" we respond, almost proudly. As if constant motion were proof of importance.</p>
-
-<p>But busyness is often just noise. It's the appearance of progress without the substance. We confuse activity with achievement, motion with meaning.</p>
-
-<h2>What Happens in the Gaps</h2>
-
-<p>The mind needs idle time. Not distracted time—scrolling, watching, listening—but truly unoccupied time. Time to wander.</p>
-
-<p>This is when:</p>
-
-<ul><li>Problems solve themselves in the background</li><li>Unexpected connections form</li><li>Creativity emerges unbidden</li><li>Perspective returns</li></ul>
-The shower insight is real. So is the walk epiphany. These don't happen despite the lack of "input"—they happen because of it.
-
-<h2>The Practice</h2>
-
-<p>Doing nothing is harder than it sounds. Our instinct is to reach for the phone, fill the silence, avoid the discomfort of stillness.</p>
-
-<p>Some ways to practice:</p>
-
-<ol><li><strong>Sit without your phone.</strong> Just five minutes. Notice what arises.</li><li><strong>Walk without headphones.</strong> Let your mind wander with your feet.</li><li><strong>Stare out windows.</strong> It's not wasting time; it's thinking.</li><li><strong>Wait without distraction.</strong> In lines, in lobbies, in life.</li></ol>
-<h2>The Return</h2>
-
-<p>After doing nothing, you return to doing something with fresh eyes. The urgent seems less urgent. The important becomes clearer. The path forward appears.</p>
-
-<p>Doing nothing is not the opposite of productivity. It's the foundation of it.</p>
-                </div>
-
-                <div class="essay-footer">
-                    <p>Thanks for reading.</p>
-                    <div class="share-buttons">
-                        <button class="btn" onclick="navigator.clipboard.writeText(window.location.href)">📋 Copy Link</button>
+                <div class="project-header">
+                    <div class="project-icon-large">🎓</div>
+                    <div class="project-info">
+                        <h1>Webster Bot</h1>
+                        <p class="project-tagline">Telegram bot for Webster University Canvas assignment reminders.</p>
+                        <div class="project-badges">
+                            <span class="badge green">Active</span>
+                            <span class="badge blue">v1.0.0</span>
+                        </div>
                     </div>
+                </div>
+
+                <div class="project-body">
+                    <h1>About</h1>
+
+<p>Webster Bot is a focused Telegram bot for Webster University Canvas assignments. It checks Canvas, formats upcoming work, and sends it through Telegram on a daily schedule or on demand.</p>
+
+<h1>Features</h1>
+
+<ul><li><strong>Canvas assignments</strong> — Pulls upcoming assignments into Telegram</li><li><strong>Daily reminders</strong> — Runs on an 8am-style cron schedule by default</li><li><strong>On-demand command</strong> — Send <code>/brief</code> to fetch assignments manually</li><li><strong>Small surface area</strong> — Built around one useful workflow: knowing what is due</li></ul>
+<h1>Tech Stack</h1>
+
+<ul><li>TypeScript</li><li>node-telegram-bot-api</li><li>node-cron</li><li>OpenAI</li><li>Axios</li></ul>
+<h1>Repository</h1>
+
+<p><a href="https://github.com/gagaci/webster-telegram-bot">View on GitHub</a></p>
                 </div>
             </div>
 
             <div class="window-statusbar">
-                <span>📝 The Art of Doing Nothing</span>
+                <span>📦 Webster Bot · v1.0.0</span>
             </div>
         </div>
     </div>
@@ -425,7 +426,7 @@ The shower insight is real. So is the walk epiphany. These don't happen despite 
         <a href="index.html" class="start-btn">⊞ START</a>
         <div class="taskbar-divider"></div>
         <div class="taskbar-items">
-            <div class="taskbar-item"><span class="nav-ico ico-essays" style="width:14px;height:14px;vertical-align:middle;"></span> The Art of Doing Nothing</div>
+            <div class="taskbar-item"><span class="nav-ico ico-projects" style="width:14px;height:14px;vertical-align:middle;"></span> Webster Bot</div>
         </div>
         <div class="taskbar-clock" id="clock">00:00</div>
     </div>

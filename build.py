@@ -10,7 +10,7 @@ Usage:
 
 Structure:
     essays/          → Put your .md essay files here
-    products/        → Put your .md product files here  
+    projects/        → Put your .md project files here  
     templates/       → HTML templates (don't edit unless customizing)
     output/          → Generated site (upload this to hosting)
 """
@@ -29,13 +29,13 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 # =============================================================================
 
 SITE_NAME = "khabib"
-SITE_DESCRIPTION = "Essays, products, and random thoughts"
+SITE_DESCRIPTION = "Essays, projects, and random thoughts"
 AUTHOR = "Khabib"
 
 # Directories
 BASE_DIR = Path(__file__).parent
 ESSAYS_DIR = BASE_DIR / "essays"
-PRODUCTS_DIR = BASE_DIR / "products"
+PROJECTS_DIR = BASE_DIR / "projects"
 TEMPLATES_DIR = BASE_DIR / "templates"
 OUTPUT_DIR = BASE_DIR / "output"
 
@@ -199,13 +199,13 @@ def load_essays():
     essays.sort(key=lambda x: x['date'], reverse=True)
     return essays
 
-def load_products():
-    """Load all products from the products directory."""
-    products = []
-    if not PRODUCTS_DIR.exists():
-        return products
+def load_projects():
+    """Load all projects from the projects directory."""
+    projects = []
+    if not PROJECTS_DIR.exists():
+        return projects
     
-    for md_file in PRODUCTS_DIR.glob('*.md'):
+    for md_file in PROJECTS_DIR.glob('*.md'):
         with open(md_file, 'r', encoding='utf-8') as f:
             content = f.read()
         
@@ -214,7 +214,7 @@ def load_products():
         
         slug = md_file.stem
         
-        products.append({
+        projects.append({
             'slug': slug,
             'title': frontmatter.get('title', slug.replace('-', ' ').title()),
             'tagline': frontmatter.get('tagline', ''),
@@ -224,10 +224,11 @@ def load_products():
             'url': frontmatter.get('url', ''),
             'github': frontmatter.get('github', ''),
             'body': html_body,
-            'filename': f'product-{slug}.html'
+            'filename': f'project-{slug}.html'
         })
     
-    return products
+    projects.sort(key=lambda x: x['title'].lower())
+    return projects
 
 def build_essay_page(essay, essays):
     """Build a single essay HTML page."""
@@ -257,21 +258,21 @@ def build_essay_page(essay, essays):
         next_link=next_link
     )
 
-def build_product_page(product):
-    """Build a single product HTML page."""
-    return render_template('product.html',
+def build_project_page(project):
+    """Build a single project HTML page."""
+    return render_template('project.html',
         site_name=SITE_NAME,
-        title=product['title'],
-        tagline=product['tagline'],
-        icon=product['icon'],
-        status=product['status'],
-        version=product['version'],
-        url=product['url'],
-        github=product['github'],
-        body=product['body']
+        title=project['title'],
+        tagline=project['tagline'],
+        icon=project['icon'],
+        status=project['status'],
+        version=project['version'],
+        url=project['url'],
+        github=project['github'],
+        body=project['body']
     )
 
-def build_index(essays, products):
+def build_index(essays, projects):
     """Build the main index page."""
     # Generate essay list HTML
     essay_items = []
@@ -289,21 +290,21 @@ def build_index(essays, products):
         </li>''')
     essays_html = '\n'.join(essay_items) if essay_items else '<li class="essay-item">No essays yet. Add .md files to the essays/ folder.</li>'
     
-    # Generate product cards HTML
-    product_cards = []
-    for product in products:
-        product_cards.append(f'''<div class="product-card win95-outset">
-            <div class="product-icon">{product['icon']}</div>
-            <div class="product-name"><a href="{product['filename']}" class="essay-link">{product['title']}</a></div>
-            <div class="product-desc">{product['tagline']}</div>
+    # Generate project cards HTML
+    project_cards = []
+    for project in projects:
+        project_cards.append(f'''<div class="project-card win95-outset">
+            <div class="project-icon">{project['icon']}</div>
+            <div class="project-name"><a href="{project['filename']}" class="essay-link">{project['title']}</a></div>
+            <div class="project-desc">{project['tagline']}</div>
         </div>''')
-    products_html = '\n'.join(product_cards) if product_cards else '<p>No products yet. Add .md files to the products/ folder.</p>'
+    projects_html = '\n'.join(project_cards) if project_cards else '<p>No projects yet. Add .md files to the projects/ folder.</p>'
     
     return render_template('index.html',
         site_name=SITE_NAME,
         site_description=SITE_DESCRIPTION,
         essays_list=essays_html,
-        products_grid=products_html,
+        projects_grid=projects_html,
         current_date=datetime.now().strftime('%B %d, %Y')
     )
 
@@ -319,10 +320,10 @@ def build_site():
     
     # Load content
     essays = load_essays()
-    products = load_products()
+    projects = load_projects()
     
     print(f"📄 Found {len(essays)} essays")
-    print(f"📦 Found {len(products)} products")
+    print(f"📦 Found {len(projects)} projects")
     
     # Build essay pages
     for essay in essays:
@@ -332,16 +333,16 @@ def build_site():
             f.write(html)
         print(f"   ✓ {essay['filename']}")
     
-    # Build product pages
-    for product in products:
-        html = build_product_page(product)
-        output_path = OUTPUT_DIR / product['filename']
+    # Build project pages
+    for project in projects:
+        html = build_project_page(project)
+        output_path = OUTPUT_DIR / project['filename']
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(html)
-        print(f"   ✓ {product['filename']}")
+        print(f"   ✓ {project['filename']}")
     
     # Build index page
-    index_html = build_index(essays, products)
+    index_html = build_index(essays, projects)
     with open(OUTPUT_DIR / 'index.html', 'w', encoding='utf-8') as f:
         f.write(index_html)
     print(f"   ✓ index.html")
@@ -375,7 +376,7 @@ if __name__ == '__main__':
     
     # Create directories if they don't exist
     ESSAYS_DIR.mkdir(exist_ok=True)
-    PRODUCTS_DIR.mkdir(exist_ok=True)
+    PROJECTS_DIR.mkdir(exist_ok=True)
     TEMPLATES_DIR.mkdir(exist_ok=True)
     
     # Build the site

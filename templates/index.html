@@ -277,7 +277,7 @@
             background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='4' y='2' width='20' height='28' fill='%23fff'/%3E%3Crect x='4' y='2' width='20' height='1' fill='%23fff'/%3E%3Crect x='4' y='2' width='1' height='28' fill='%23dfdfdf'/%3E%3Crect x='23' y='2' width='1' height='28' fill='%23808080'/%3E%3Crect x='4' y='29' width='20' height='1' fill='%23808080'/%3E%3Crect x='24' y='2' width='4' height='4' fill='%23c0c0c0'/%3E%3Cline x1='24' y1='2' x2='28' y2='6' stroke='%23808080' stroke-width='1'/%3E%3Crect x='7' y='8' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='11' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='14' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='17' width='10' height='1' fill='%23000080'/%3E%3Crect x='7' y='20' width='14' height='1' fill='%23000080'/%3E%3Crect x='7' y='23' width='8' height='1' fill='%23000080'/%3E%3C/svg%3E") no-repeat center/contain;
         }
 
-        .ico-products {
+        .ico-projects {
             background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='3' y='8' width='26' height='20' fill='%23c09050'/%3E%3Crect x='3' y='8' width='26' height='1' fill='%23e0c090'/%3E%3Crect x='3' y='8' width='1' height='20' fill='%23e0c090'/%3E%3Crect x='28' y='8' width='1' height='20' fill='%23806030'/%3E%3Crect x='3' y='27' width='26' height='1' fill='%23806030'/%3E%3Crect x='3' y='8' width='26' height='5' fill='%23d0a060'/%3E%3Crect x='3' y='12' width='26' height='1' fill='%23806030'/%3E%3Crect x='12' y='6' width='8' height='4' fill='%23d0a060'/%3E%3Crect x='12' y='6' width='8' height='1' fill='%23e0c090'/%3E%3Crect x='12' y='6' width='1' height='4' fill='%23e0c090'/%3E%3Crect x='19' y='6' width='1' height='4' fill='%23806030'/%3E%3Crect x='14' y='14' width='4' height='3' fill='%23e0c090'/%3E%3C/svg%3E") no-repeat center/contain;
         }
 
@@ -458,44 +458,44 @@
             margin-left: 20px;
         }
 
-        /* ── Products Section ── */
-        .product-grid {
+        /* ── Projects Section ── */
+        .project-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 16px;
             padding: 30px;
         }
 
-        .product-card {
+        .project-card {
             border: 1px solid #e0e0e0;
             border-radius: 4px;
             padding: 20px;
             transition: all 0.15s;
         }
 
-        .product-card:hover {
+        .project-card:hover {
             border-color: var(--blue);
         }
 
-        .product-icon {
+        .project-icon {
             font-size: 32px;
             margin-bottom: 12px;
         }
 
-        .product-name {
+        .project-name {
             font-family: 'Press Start 2P', monospace;
             font-size: 8px;
             margin-bottom: 8px;
         }
 
-        .product-name a {
+        .project-name a {
             color: var(--text);
             text-decoration: none;
         }
 
-        .product-name a:hover { color: var(--blue); }
+        .project-name a:hover { color: var(--blue); }
 
-        .product-desc {
+        .project-desc {
             font-size: 13px;
             color: var(--text-muted);
             line-height: 1.5;
@@ -907,8 +907,8 @@
                             <li class="nav-item" data-section="essays" onclick="navigateTo('essays')">
                                 <span class="nav-ico ico-essays"></span> Essays
                             </li>
-                            <li class="nav-item" data-section="products" onclick="navigateTo('products')">
-                                <span class="nav-ico ico-products"></span> Products
+                            <li class="nav-item" data-section="projects" onclick="navigateTo('projects')">
+                                <span class="nav-ico ico-projects"></span> Projects
                             </li>
                             <li class="nav-item" data-section="bookmarks" onclick="navigateTo('bookmarks')">
                                 <span class="nav-ico ico-bookmarks"></span> Bookmarks
@@ -943,9 +943,9 @@
                                     <p>Long-form thoughts on technology, life, and everything in between.</p>
                                     <span class="card-count">READ</span>
                                 </div>
-                                <div class="home-card" onclick="navigateTo('products')">
-                                    <span class="nav-ico ico-products" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
-                                    <h3>PRODUCTS</h3>
+                                <div class="home-card" onclick="navigateTo('projects')">
+                                    <span class="nav-ico ico-projects" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
+                                    <h3>PROJECTS</h3>
                                     <p>Things I've built and shipped into the world.</p>
                                     <span class="card-count">EXPLORE</span>
                                 </div>
@@ -975,14 +975,14 @@
                             </ul>
                         </div>
 
-                        <!-- Products -->
-                        <div id="products" class="section">
+                        <!-- Projects -->
+                        <div id="projects" class="section">
                             <div class="section-header">
-                                <h1>PRODUCTS</h1>
+                                <h1>PROJECTS</h1>
                                 <p>Things I've built and shipped.</p>
                             </div>
-                            <div class="product-grid">
-                                {{ products_grid }}
+                            <div class="project-grid">
+                                {{ projects_grid }}
                             </div>
                         </div>
 
@@ -1004,7 +1004,7 @@
                                 <div class="bookmark-category">
                                     <h2>TOOLS</h2>
                                     <ul>
-                                        <li><a href="https://github.com"><span class="bk-ico">💻</span> GitHub</a></li>
+                                        <li><a href="https://github.com/gagaci"><span class="bk-ico">💻</span> GitHub</a></li>
                                         <li><a href="https://figma.com"><span class="bk-ico">🎨</span> Figma</a></li>
                                         <li><a href="https://claude.ai"><span class="bk-ico">🤖</span> Claude</a></li>
                                     </ul>
@@ -1046,7 +1046,7 @@
                                     <p>Hi, I'm khabib. I build things on the internet. I'm interested in software, design, writing, and the intersection of all three.</p>
                                 </div>
                                 <div class="about-card">
-                                    <span class="nav-ico ico-products" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
+                                    <span class="nav-ico ico-projects" style="width:32px;height:32px;display:block;margin-bottom:8px;"></span>
                                     <h3>WHAT I DO</h3>
                                     <p>I build minimal tools that do one thing well. No bloat, no dependencies, no magic. Just simple software that works.</p>
                                 </div>
@@ -1107,7 +1107,7 @@
         const sectionMeta = {
             home:      { title: '{{ site_name }}.exe',   ico: 'ico-computer', status: 'Home' },
             essays:    { title: 'essays.txt',            ico: 'ico-essays',   status: 'Essays' },
-            products:  { title: 'products.dat',          ico: 'ico-products', status: 'Products' },
+            projects:  { title: 'projects.dat',          ico: 'ico-projects', status: 'Projects' },
             bookmarks: { title: 'bookmarks.url',         ico: 'ico-bookmarks',status: 'Bookmarks' },
             about:     { title: 'about.nfo',             ico: 'ico-about',    status: 'About' }
         };

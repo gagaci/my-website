@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimal Blog Engine - khabib</title>
+    <title>Morning Bot - khabib</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -90,7 +90,7 @@
 
         .nav-ico { image-rendering: pixelated; display: inline-block; }
 
-        .ico-products {
+        .ico-projects {
             background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Crect x='3' y='8' width='26' height='20' fill='%23c09050'/%3E%3Crect x='3' y='8' width='26' height='1' fill='%23e0c090'/%3E%3Crect x='3' y='8' width='1' height='20' fill='%23e0c090'/%3E%3Crect x='28' y='8' width='1' height='20' fill='%23806030'/%3E%3Crect x='3' y='27' width='26' height='1' fill='%23806030'/%3E%3Crect x='3' y='8' width='26' height='5' fill='%23d0a060'/%3E%3Crect x='3' y='12' width='26' height='1' fill='%23806030'/%3E%3Crect x='12' y='6' width='8' height='4' fill='%23d0a060'/%3E%3Crect x='12' y='6' width='8' height='1' fill='%23e0c090'/%3E%3Crect x='12' y='6' width='1' height='4' fill='%23e0c090'/%3E%3Crect x='19' y='6' width='1' height='4' fill='%23806030'/%3E%3Crect x='14' y='14' width='4' height='3' fill='%23e0c090'/%3E%3C/svg%3E") no-repeat center/contain;
         }
 
@@ -154,8 +154,8 @@
             background: white;
         }
 
-        /* ── Product Header ── */
-        .product-header {
+        /* ── Project Header ── */
+        .project-header {
             display: flex;
             gap: 20px;
             align-items: flex-start;
@@ -164,7 +164,7 @@
             background: linear-gradient(135deg, rgba(0,120,215,0.03) 0%, transparent 60%);
         }
 
-        .product-icon-large {
+        .project-icon-large {
             width: 64px;
             height: 64px;
             display: flex;
@@ -177,20 +177,20 @@
             flex-shrink: 0;
         }
 
-        .product-info h1 {
+        .project-info h1 {
             font-family: 'Press Start 2P', monospace;
             font-size: 12px;
             margin-bottom: 8px;
             line-height: 1.6;
         }
 
-        .product-tagline {
+        .project-tagline {
             color: var(--text-muted);
             font-size: 14px;
             margin-bottom: 12px;
         }
 
-        .product-badges { display: flex; gap: 6px; }
+        .project-badges { display: flex; gap: 6px; }
 
         .badge {
             padding: 3px 10px;
@@ -212,14 +212,14 @@
             border-color: var(--blue);
         }
 
-        /* ── Product Body ── */
-        .product-body {
+        /* ── Project Body ── */
+        .project-body {
             padding: 30px;
             font-size: 15px;
             line-height: 1.8;
         }
 
-        .product-body h1 {
+        .project-body h1 {
             font-family: 'Press Start 2P', monospace;
             font-size: 11px;
             color: var(--black);
@@ -227,9 +227,9 @@
             line-height: 1.6;
         }
 
-        .product-body h1:first-child { margin-top: 0; }
+        .project-body h1:first-child { margin-top: 0; }
 
-        .product-body h2 {
+        .project-body h2 {
             font-family: 'Press Start 2P', monospace;
             font-size: 9px;
             color: var(--blue);
@@ -237,21 +237,21 @@
             line-height: 1.6;
         }
 
-        .product-body h3 {
+        .project-body h3 {
             font-size: 15px;
             font-weight: 600;
             margin: 20px 0 10px;
         }
 
-        .product-body p { margin-bottom: 16px; }
+        .project-body p { margin-bottom: 16px; }
 
-        .product-body ul, .product-body ol { margin: 14px 0 14px 24px; }
-        .product-body li { margin-bottom: 6px; }
+        .project-body ul, .project-body ol { margin: 14px 0 14px 24px; }
+        .project-body li { margin-bottom: 6px; }
 
-        .product-body a { color: var(--blue); text-decoration: underline; }
-        .product-body a:hover { color: #005a9e; }
+        .project-body a { color: var(--blue); text-decoration: underline; }
+        .project-body a:hover { color: #005a9e; }
 
-        .product-body code {
+        .project-body code {
             background: #f0f0f0;
             padding: 2px 6px;
             font-family: 'Courier New', monospace;
@@ -260,7 +260,7 @@
             border-radius: 2px;
         }
 
-        .product-body .code-block {
+        .project-body .code-block {
             background: var(--black);
             color: #00ff41;
             padding: 20px;
@@ -273,7 +273,7 @@
             border-radius: 4px;
         }
 
-        .product-body blockquote {
+        .project-body blockquote {
             margin: 20px 0;
             padding: 16px 20px;
             border-left: 3px solid var(--blue);
@@ -366,8 +366,8 @@
         @media (max-width: 768px) {
             .desktop { padding: 0 0 40px; }
             .window { max-width: 100%; height: calc(100vh - 40px); border-radius: 0; border: none; }
-            .product-header, .product-body { padding: 20px; }
-            .product-header { flex-direction: column; }
+            .project-header, .project-body { padding: 20px; }
+            .project-header { flex-direction: column; }
         }
     </style>
 </head>
@@ -376,8 +376,8 @@
         <div class="window">
             <div class="window-header">
                 <div class="window-header-title">
-                    <span class="nav-ico ico-products" style="width:16px;height:16px;"></span>
-                    <span>Minimal Blog Engine — explorer.exe</span>
+                    <span class="nav-ico ico-projects" style="width:16px;height:16px;"></span>
+                    <span>Morning Bot — explorer.exe</span>
                 </div>
                 <div class="window-controls">
                     <button class="window-ctrl">─</button>
@@ -387,61 +387,37 @@
             </div>
 
             <div class="window-body">
-                <div class="product-header">
-                    <div class="product-icon-large">⚡</div>
-                    <div class="product-info">
-                        <h1>Minimal Blog Engine</h1>
-                        <p class="product-tagline">A static site generator in 500 lines. No dependencies. No magic.</p>
-                        <div class="product-badges">
+                <div class="project-header">
+                    <div class="project-icon-large">☀️</div>
+                    <div class="project-info">
+                        <h1>Morning Bot</h1>
+                        <p class="project-tagline">Personal morning briefing Telegram bot with weather, calendar, Canvas, and Jira.</p>
+                        <div class="project-badges">
                             <span class="badge green">Active</span>
-                            <span class="badge blue">v1.2.0</span>
+                            <span class="badge blue">v1.0.0</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="product-body">
+                <div class="project-body">
                     <h1>About</h1>
 
-<p>Minimal Blog Engine is exactly what it sounds like: a way to turn Markdown files into a website with zero configuration and zero dependencies beyond Python 3.</p>
-
-<p>I built this because every other static site generator I tried was either too complicated, too slow, or required me to learn Yet Another Configuration Language.</p>
+<p>Morning Bot is a TypeScript Telegram bot that sends a daily personal briefing. It brings together weather, calendar events, Canvas assignments, and Jira focus items into short Telegram messages.</p>
 
 <h1>Features</h1>
 
-<ul><li><strong>500 lines of Python</strong> — Read the entire source in one sitting</li><li><strong>Zero dependencies</strong> — Just Python 3.8+</li><li><strong>Markdown to HTML</strong> — With syntax highlighting</li><li><strong>RSS feed</strong> — Generated automatically</li><li><strong>Fast</strong> — Builds 1000 posts in under 2 seconds</li><li><strong>Live reload</strong> — For local development</li></ul>
-<h1>Quick Start</h1>
+<ul><li><strong>Daily schedule</strong> — Runs on a configurable morning cron schedule</li><li><strong>On-demand briefings</strong> — Send <code>/brief</code> in Telegram to generate the briefing whenever you want</li><li><strong>Multiple sources</strong> — Combines weather, calendar, Canvas, and Jira context</li><li><strong>Telegram-first</strong> — Sends clean HTML-formatted Telegram messages</li></ul>
+<h1>Tech Stack</h1>
 
-<p>Clone the repo and run:</p>
+<ul><li>TypeScript</li><li>node-telegram-bot-api</li><li>node-cron</li><li>OpenAI</li><li>Axios</li></ul>
+<h1>Repository</h1>
 
-<pre class="code-block"># Clone the repository
-git clone https://github.com/khabib/minimal-blog
-cd minimal-blog
-
-<h1>Create your first post</h1>
-echo "# Hello World" &gt; posts/hello.md
-
-<h1>Build the site</h1>
-python blog.py build
-
-<h1>Start local server</h1>
-python blog.py serve
-</pre>
-
-<h1>Why Another SSG?</h1>
-
-<p>I was tired of:</p>
-
-<ul><li>Jekyll's Ruby dependencies breaking after every OS update</li><li>Hugo's Go templates being unreadable</li><li>Gatsby taking 45 seconds to build 10 pages</li><li>Every SSG requiring a config file longer than my actual content</li></ul>
-So I wrote my own. It does exactly what I need and nothing more.
-
-<h1>License</h1>
-
-<p>MIT — Do whatever you want with it.</p>
+<p><a href="https://github.com/gagaci/my-telegram-bot">View on GitHub</a></p>
                 </div>
             </div>
 
             <div class="window-statusbar">
-                <span>📦 Minimal Blog Engine · v1.2.0</span>
+                <span>📦 Morning Bot · v1.0.0</span>
             </div>
         </div>
     </div>
@@ -450,7 +426,7 @@ So I wrote my own. It does exactly what I need and nothing more.
         <a href="index.html" class="start-btn">⊞ START</a>
         <div class="taskbar-divider"></div>
         <div class="taskbar-items">
-            <div class="taskbar-item"><span class="nav-ico ico-products" style="width:14px;height:14px;vertical-align:middle;"></span> Minimal Blog Engine</div>
+            <div class="taskbar-item"><span class="nav-ico ico-projects" style="width:14px;height:14px;vertical-align:middle;"></span> Morning Bot</div>
         </div>
         <div class="taskbar-clock" id="clock">00:00</div>
     </div>

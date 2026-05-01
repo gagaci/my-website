@@ -4,8 +4,8 @@ tagline: A static site generator in 500 lines. No dependencies. No magic.
 icon: ⚡
 status: Active
 version: v1.2.0
-url: https://github.com/khabib/minimal-blog
-github: https://github.com/khabib/minimal-blog
+url: https://github.com/gagaci/my-website
+github: https://github.com/gagaci/my-website
 ---
 
 # About
@@ -29,8 +29,8 @@ Clone the repo and run:
 
 ```bash
 # Clone the repository
-git clone https://github.com/khabib/minimal-blog
-cd minimal-blog
+git clone https://github.com/gagaci/my-website
+cd my-website
 
 # Create your first post
 echo "# Hello World" > posts/hello.md
