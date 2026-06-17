@@ -37,6 +37,42 @@
   .doc-body hr { border:0; border-top:1px solid #c8c8c8; margin:18px 0; }
   .doc-links { margin-top:18px; padding-top:14px; border-top:1px solid #e2e2e2; font-size:13px; }
   .doc-links a { color:#000080; margin-right:16px; }
+
+  /* ===== mobile / narrow screens ===== */
+  #btn-folders { display:none; }
+  @media (max-width: 640px) {
+    #menubar { display:none !important; }
+    #btn-folders { display:flex !important; }
+    .tb-extra { display:none !important; }
+
+    /* folder tree becomes a slide-in drawer over the file view */
+    #panes { position:relative; }
+    #tree-pane {
+      position:absolute !important;
+      top:0; left:0; bottom:0;
+      width:230px !important; max-width:82%;
+      margin:0 !important;
+      transform:translateX(-110%);
+      transition:transform .18s ease;
+      z-index:30;
+    }
+    #tree-pane.show { transform:translateX(0); }
+    #tree-backdrop.show { display:block !important; }
+    #fileview { margin-left:0 !important; }
+
+    .hello-h { font-size:28px !important; }
+    .folder-h { font-size:23px !important; }
+
+    /* drop the Type column so Name has room */
+    .col-type, .cell-type { display:none !important; }
+
+    /* keep only the middle status segment */
+    #st-left, #st-free { display:none !important; }
+
+    /* keep the taskbar window button from forcing overflow */
+    #tb-winbtn { min-width:0 !important; flex:1 1 auto; overflow:hidden; }
+    #tb-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  }
 </style>
 </head>
 <body>
@@ -134,7 +170,7 @@
     </div>
 
     <!-- menu bar -->
-    <div class="menu" style="display:flex; margin:0 4px; padding:1px 2px; font-size:12px;">
+    <div id="menubar" class="menu" style="display:flex; margin:0 4px; padding:1px 2px; font-size:12px;">
       <span style="padding:3px 8px;"><u>F</u>ile</span>
       <span style="padding:3px 8px;"><u>E</u>dit</span>
       <span style="padding:3px 8px;"><u>V</u>iew</span>
@@ -146,17 +182,18 @@
 
     <!-- toolbar -->
     <div style="display:flex; align-items:center; gap:7px; margin:2px 4px 0; padding:4px 6px; box-shadow: inset 0 1px #fff, inset 0 -1px #808080;">
+      <button id="btn-folders" class="btn" style="align-items:center; gap:5px; height:26px; padding:0 9px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; font:12px Tahoma; cursor:pointer;" title="Folders"><svg width="15" height="15"><use href="#ic-folder-open"></use></svg> <span style="font-weight:700;">Folders</span></button>
       <button id="btn-back" class="btn tbtn" style="display:flex; align-items:center; gap:5px; height:26px; padding:0 8px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; font:12px Tahoma; cursor:pointer;"><span style="font-size:14px; line-height:1;">←</span> <span style="font-weight:700;">Back</span> <span style="font-size:8px;">▼</span></button>
       <button id="btn-fwd" class="btn tbtn" style="display:flex; align-items:center; gap:5px; height:26px; padding:0 8px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; font:12px Tahoma; cursor:pointer;"><span style="font-size:14px; line-height:1;">→</span> <span style="font-weight:700;">Forward</span> <span style="font-size:8px;">▼</span></button>
       <button id="btn-up" class="btn tbtn" style="width:30px; height:26px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; font:14px Tahoma; cursor:pointer;" title="Up One Level">↑</button>
-      <div style="width:2px; height:24px; box-shadow: inset 1px 0 #808080, inset -1px 0 #fff;"></div>
-      <button class="btn" style="width:30px; height:26px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; cursor:pointer;" title="Cut"><span style="font-size:14px;">✂</span></button>
-      <button style="width:30px; height:26px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; color:#808080; cursor:default;" title="Copy"><span style="font-size:13px;">📋</span></button>
-      <div style="width:2px; height:24px; box-shadow: inset 1px 0 #808080, inset -1px 0 #fff;"></div>
+      <div class="tb-extra" style="width:2px; height:24px; box-shadow: inset 1px 0 #808080, inset -1px 0 #fff;"></div>
+      <button class="btn tb-extra" style="width:30px; height:26px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; cursor:pointer;" title="Cut"><span style="font-size:14px;">✂</span></button>
+      <button class="tb-extra" style="width:30px; height:26px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; color:#808080; cursor:default;" title="Copy"><span style="font-size:13px;">📋</span></button>
+      <div class="tb-extra" style="width:2px; height:24px; box-shadow: inset 1px 0 #808080, inset -1px 0 #fff;"></div>
       <span style="flex:1"></span>
-      <button style="width:32px; height:26px; background:#c0c0c0; border:0; box-shadow: inset 1px 1px #000, inset -1px -1px #fff, inset 2px 2px #808080, inset -2px -2px #dfdfdf; cursor:pointer;" title="Large Icons"><span style="font-size:13px;">▦</span></button>
-      <button class="btn" style="width:32px; height:26px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; cursor:pointer;" title="List"><span style="font-size:12px;">☰</span></button>
-      <button class="btn" style="width:32px; height:26px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; cursor:pointer;" title="Details"><span style="font-size:12px;">☷</span></button>
+      <button class="tb-extra" style="width:32px; height:26px; background:#c0c0c0; border:0; box-shadow: inset 1px 1px #000, inset -1px -1px #fff, inset 2px 2px #808080, inset -2px -2px #dfdfdf; cursor:pointer;" title="Large Icons"><span style="font-size:13px;">▦</span></button>
+      <button class="btn tb-extra" style="width:32px; height:26px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; cursor:pointer;" title="List"><span style="font-size:12px;">☰</span></button>
+      <button class="btn tb-extra" style="width:32px; height:26px; background:#c0c0c0; border:0; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; cursor:pointer;" title="Details"><span style="font-size:12px;">☷</span></button>
     </div>
 
     <!-- address bar -->
@@ -171,10 +208,13 @@
     </div>
 
     <!-- panes -->
-    <div style="flex:1; display:flex; margin:1px 4px 0; min-height:0;">
+    <div id="panes" style="flex:1; display:flex; margin:1px 4px 0; min-height:0;">
+
+      <!-- drawer backdrop (mobile only) -->
+      <div id="tree-backdrop" style="display:none; position:absolute; inset:0; background:rgba(0,0,0,0.35); z-index:20;"></div>
 
       <!-- TREE -->
-      <div style="width:248px; flex:none; background:#fff; box-shadow: inset -1px -1px #fff, inset 1px 1px #808080, inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a; padding:8px 8px; font-size:13px; overflow:auto;">
+      <div id="tree-pane" style="width:248px; flex:none; background:#fff; box-shadow: inset -1px -1px #fff, inset 1px 1px #808080, inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a; padding:8px 8px; font-size:13px; overflow:auto;">
         <div style="font-size:11px; color:#666; padding:0 2px 6px; border-bottom:1px solid #e0e0e0; margin-bottom:6px;">All Folders</div>
 
         <div style="display:flex; align-items:center; gap:6px; padding:2px 2px;">
@@ -212,7 +252,7 @@
     <div style="display:flex; gap:3px; margin:3px 4px 4px; height:21px;">
       <div id="st-left" style="flex:none; min-width:140px; padding:3px 8px; font-size:11px; box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;"></div>
       <div id="st-mid" style="flex:1; padding:3px 8px; font-size:11px; color:#303030; box-shadow: inset -1px -1px #fff, inset 1px 1px #808080; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
-      <div style="flex:none; min-width:110px; padding:3px 8px; font-size:11px; box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;">640K free</div>
+      <div id="st-free" style="flex:none; min-width:110px; padding:3px 8px; font-size:11px; box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;">640K free</div>
     </div>
   </div>
 
@@ -222,8 +262,8 @@
       <svg width="18" height="18"><use href="#ic-flag"></use></svg>Start
     </button>
     <div style="width:2px; height:25px; box-shadow: inset 1px 0 #808080, inset -1px 0 #fff;"></div>
-    <button style="display:flex; align-items:center; gap:8px; min-width:200px; height:27px; padding:0 11px; background:#c0c0c0; border:0; box-shadow: inset 1px 1px #000, inset -1px -1px #fff, inset 2px 2px #808080, inset -2px -2px #dfdfdf; font:12px Tahoma; text-align:left; cursor:pointer;">
-      <svg width="16" height="16"><use id="tb-winicon" href="#ic-floppy"></use></svg><span id="tb-title">Exploring — {{ site_name }} (C:)</span>
+    <button id="tb-winbtn" style="display:flex; align-items:center; gap:8px; min-width:200px; height:27px; padding:0 11px; background:#c0c0c0; border:0; box-shadow: inset 1px 1px #000, inset -1px -1px #fff, inset 2px 2px #808080, inset -2px -2px #dfdfdf; font:12px Tahoma; text-align:left; cursor:pointer;">
+      <svg width="16" height="16" style="flex:none;"><use id="tb-winicon" href="#ic-floppy"></use></svg><span id="tb-title">Exploring — {{ site_name }} (C:)</span>
     </button>
     <span style="flex:1"></span>
     <div style="display:flex; align-items:center; gap:7px; height:27px; padding:0 12px; font-size:12px; box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;"><svg width="15" height="15"><use href="#ic-video"></use></svg><span id="clock"></span></div>
@@ -282,7 +322,7 @@ function homeHTML(){
   return '<div>'
     + '<div style="display:flex; flex-wrap:wrap; gap:22px 28px; align-items:center; padding:22px 26px 20px; border-bottom:1px solid #e2e2e2; background:linear-gradient(180deg,#f6f6f3,#fff);">'
     +   '<div style="flex:1; min-width:280px;">'
-    +     '<div style="font-family:\'Pixelify Sans\',sans-serif; font-weight:700; font-size:38px; line-height:1; color:#0a0a0a;">Hello, I\'m '+esc(SITE_NAME)+'.</div>'
+    +     '<div class="hello-h" style="font-family:\'Pixelify Sans\',sans-serif; font-weight:700; font-size:38px; line-height:1; color:#0a0a0a;">Hello, I\'m '+esc(SITE_NAME)+'.</div>'
     +     '<div style="font-size:14px; color:#555; margin-top:10px;">'+esc(SITE.description)+'</div>'
     +   '</div>'
     + '</div>'
@@ -295,7 +335,7 @@ function folderHeaderHTML(icon, name, desc){
   return '<div style="display:flex; align-items:center; gap:16px; padding:20px 26px 18px; border-bottom:1px solid #e2e2e2; background:linear-gradient(180deg,#f6f6f3,#fff);">'
     + '<svg width="40" height="40"><use href="#'+icon+'"></use></svg>'
     + '<div style="min-width:0;">'
-    +   '<div style="font-family:\'Pixelify Sans\',sans-serif; font-weight:700; font-size:30px; line-height:1; color:#0a0a0a;">'+esc(name)+'</div>'
+    +   '<div class="folder-h" style="font-family:\'Pixelify Sans\',sans-serif; font-weight:700; font-size:30px; line-height:1; color:#0a0a0a;">'+esc(name)+'</div>'
     +   (desc ? '<div style="font-size:13px; color:#555; margin-top:7px;">'+esc(desc)+'</div>' : '')
     + '</div></div>';
 }
@@ -307,14 +347,14 @@ function listHTML(page){
     var nameStyle = s ? 'background:#000080; color:#fff;' : 'color:#000;';
     return '<div class="row" data-row="'+i+'" style="display:flex; align-items:center; padding:3px 0; cursor:pointer; '+rowStyle+'">'
       + '<div style="flex:1; min-width:0; display:flex; align-items:center; gap:8px; padding-left:8px;"><svg width="18" height="18" style="flex:none;"><use href="#'+r.icon+'"></use></svg><span style="font-size:13px; padding:0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; '+nameStyle+'">'+esc(r.name)+'</span></div>'
-      + '<div style="width:150px; flex:none; font-size:12px; color:#333; padding:0 8px;">'+esc(r.type)+'</div>'
+      + '<div class="cell-type" style="width:150px; flex:none; font-size:12px; color:#333; padding:0 8px;">'+esc(r.type)+'</div>'
       + '<div style="width:170px; flex:none; font-size:12px; color:#333; padding:0 8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">'+esc(r.detail)+'</div>'
       + '</div>';
   }).join('');
   return '<div>'
     + '<div style="display:flex; align-items:stretch; margin:0; font-size:11px; color:#000; box-shadow: inset 0 -1px #c8c8c8;">'
     +   '<div style="flex:1; min-width:0; padding:4px 8px; box-shadow: inset -1px 0 #c8c8c8;">Name</div>'
-    +   '<div style="width:150px; flex:none; padding:4px 8px; box-shadow: inset -1px 0 #c8c8c8;">Type</div>'
+    +   '<div class="col-type" style="width:150px; flex:none; padding:4px 8px; box-shadow: inset -1px 0 #c8c8c8;">Type</div>'
     +   '<div style="width:170px; flex:none; padding:4px 8px;">'+esc(page.detailLabel || '')+'</div>'
     + '</div>' + rows + '</div>';
 }
@@ -406,9 +446,14 @@ function renderTree(){
   $('tree-items').innerHTML = html;
   var items = $('tree-items').querySelectorAll('[data-nav]');
   for (var i = 0; i < items.length; i++){
-    (function(node){ node.addEventListener('click', function(){ setView(node.getAttribute('data-nav')); }); })(items[i]);
+    (function(node){ node.addEventListener('click', function(){ setView(node.getAttribute('data-nav')); closeDrawer(); }); })(items[i]);
   }
 }
+
+/* ---------- mobile folder drawer ---------- */
+function openDrawer(){ $('tree-pane').classList.add('show'); $('tree-backdrop').classList.add('show'); }
+function closeDrawer(){ $('tree-pane').classList.remove('show'); $('tree-backdrop').classList.remove('show'); }
+function toggleDrawer(){ $('tree-pane').classList.contains('show') ? closeDrawer() : openDrawer(); }
 
 function wireFileView(){
   var fv = $('fileview');
@@ -457,7 +502,9 @@ function tick(){
 $('btn-back').addEventListener('click', goBack);
 $('btn-fwd').addEventListener('click', goFwd);
 $('btn-up').addEventListener('click', goUp);
-$('c-label').addEventListener('click', function(){ setView('home'); });
+$('btn-folders').addEventListener('click', toggleDrawer);
+$('tree-backdrop').addEventListener('click', closeDrawer);
+$('c-label').addEventListener('click', function(){ setView('home'); closeDrawer(); });
 tick(); setInterval(tick, 1000);
 render();
 </script>
