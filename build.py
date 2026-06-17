@@ -300,73 +300,114 @@ def build_project_page(project):
         body=project['body']
     )
 
+def _fmt_date(raw, fmt='%m/%d/%Y'):
+    """Format a YYYY-MM-DD date string, falling back to the raw value."""
+    if not raw:
+        return ''
+    try:
+        return datetime.strptime(str(raw), '%Y-%m-%d').strftime(fmt)
+    except Exception:
+        return str(raw)
+
+
+# About text shown in the Explorer's "About" document view.
+ABOUT_BODY = [
+    "I'm khabib — a builder, writer, and tinkerer.",
+    "This is my corner of the internet: essays I'm working through, projects I've shipped, and links worth keeping. The whole thing runs on a small static-site generator I wrote myself.",
+]
+
+# Bookmarks shown in the Explorer's "Bookmarks" folder.
+BOOKMARKS = [
+    {'name': 'Hacker News',     'detail': 'news.ycombinator.com',  'url': 'https://news.ycombinator.com'},
+    {'name': 'Are.na',          'detail': 'are.na',                'url': 'https://www.are.na'},
+    {'name': 'MDN Web Docs',    'detail': 'developer.mozilla.org', 'url': 'https://developer.mozilla.org'},
+    {'name': 'Wayback Machine', 'detail': 'web.archive.org',       'url': 'https://web.archive.org'},
+]
+
+
+def build_site_data(essays, projects, videos):
+    """Assemble the JSON data model consumed by the Explorer front-end."""
+    pages = {}
+
+    # Essays — open in-app as document views.
+    pages['essays'] = {
+        'icon': 'ic-doc', 'name': 'Essays',
+        'desc': 'Long-form thoughts on technology, life, and everything in between.',
+        'detailLabel': 'Modified',
+        'items': [{
+            'icon': 'ic-doc', 'name': e['title'], 'type': 'Text Document',
+            'detail': _fmt_date(e['date']), 'body': e['body'],
+        } for e in essays],
+    }
+
+    # Projects — open in-app, with external links to repo / live site.
+    pages['projects'] = {
+        'icon': 'ic-folder', 'name': 'Projects',
+        'desc': "Things I've built and shipped into the world.",
+        'detailLabel': 'Status',
+        'items': [{
+            'icon': 'ic-folder', 'name': p['title'], 'type': 'Application',
+            'detail': p['status'] or 'Active', 'body': p['body'],
+            'url': p['url'], 'github': p['github'],
+        } for p in projects],
+    }
+
+    # Bookmarks — double-click opens the link in a new tab.
+    pages['bookmarks'] = {
+        'icon': 'ic-star', 'name': 'Bookmarks',
+        'desc': 'Links I find interesting and worth sharing.',
+        'detailLabel': 'Address',
+        'items': [{
+            'icon': 'ic-star', 'name': b['name'], 'type': 'Internet Shortcut',
+            'detail': b['detail'], 'url': b['url'], 'open': 'external',
+        } for b in BOOKMARKS],
+    }
+
+    # About — a document view.
+    pages['about'] = {
+        'icon': 'ic-person', 'name': 'About', 'kind': 'about',
+        'desc': "Who I am and what I'm working on.",
+        'body': ABOUT_BODY,
+    }
+
+    # Videos — double-click opens the YouTube link.
+    pages['videos'] = {
+        'icon': 'ic-video', 'name': 'Videos',
+        'desc': "Videos I've made and published on YouTube.",
+        'detailLabel': 'Published',
+        'items': [{
+            'icon': 'ic-video', 'name': v['title'], 'type': 'Video Clip',
+            'detail': _fmt_date(v['date']), 'url': v['youtube_url'], 'open': 'external',
+        } for v in videos],
+    }
+
+    # Home grid order (whoami.exe is decorative — no page to open).
+    sections = [
+        {'id': 'essays',    'icon': 'ic-doc',     'name': 'Essays',     'verb': 'read',    'desc': pages['essays']['desc']},
+        {'id': 'projects',  'icon': 'ic-folder',  'name': 'Projects',   'verb': 'explore', 'desc': pages['projects']['desc']},
+        {'id': 'bookmarks', 'icon': 'ic-star',    'name': 'Bookmarks',  'verb': 'browse',  'desc': pages['bookmarks']['desc']},
+        {'id': 'about',     'icon': 'ic-person',  'name': 'About',      'verb': 'info',    'desc': pages['about']['desc']},
+        {'id': 'videos',    'icon': 'ic-video',   'name': 'Videos',     'verb': 'watch',   'desc': pages['videos']['desc']},
+        {'id': 'whoami',    'icon': 'ic-monitor', 'name': 'whoami.exe', 'verb': 'run',     'desc': 'builder, writer, tinkerer'},
+    ]
+
+    return {
+        'name': SITE_NAME,
+        'description': SITE_DESCRIPTION,
+        'sections': sections,
+        'pages': pages,
+    }
+
+
 def build_index(essays, projects, videos):
-    """Build the main index page."""
-    # Generate essay list HTML
-    essay_items = []
-    for essay in essays:
-        date_display = essay['date']
-        if date_display:
-            try:
-                dt = datetime.strptime(date_display, '%Y-%m-%d')
-                date_display = dt.strftime('%B %Y')
-            except:
-                pass
-        essay_items.append(f'''<li class="essay-item">
-            <a href="{essay['filename']}" class="essay-link">{essay['title']}</a>
-            <span class="essay-date">{date_display}</span>
-        </li>''')
-    essays_html = '\n'.join(essay_items) if essay_items else '<li class="essay-item">No essays yet. Add .md files to the essays/ folder.</li>'
-    
-    # Generate project cards HTML
-    project_cards = []
-    for project in projects:
-        github_link = (
-            f'''<a href="{project['github']}" target="_blank" rel="noopener" class="project-repo">GitHub repo</a>'''
-            if project['github'] else ''
-        )
-        project_cards.append(f'''<div class="project-card win95-outset">
-            <div class="project-icon">{project['icon']}</div>
-            <div class="project-name"><a href="{project['filename']}" class="essay-link">{project['title']}</a></div>
-            <div class="project-desc">{project['tagline']}</div>
-            {github_link}
-        </div>''')
-    projects_html = '\n'.join(project_cards) if project_cards else '<p>No projects yet. Add .md files to the projects/ folder.</p>'
-    
-    # Generate video cards HTML
-    video_cards = []
-    for video in videos:
-        date_display = video['date']
-        if date_display:
-            try:
-                dt = datetime.strptime(str(date_display), '%Y-%m-%d')
-                date_display = dt.strftime('%B %Y')
-            except:
-                pass
-        video_cards.append(f'''<div class="video-card">
-            <a href="{video['youtube_url']}" target="_blank" rel="noopener" class="video-thumbnail-link">
-                <div class="video-thumbnail">
-                    <img src="{video['thumbnail_url']}" alt="{video['title']}" loading="lazy">
-                    <div class="video-play-overlay">
-                        <div class="video-play-btn">&#9654;</div>
-                    </div>
-                </div>
-            </a>
-            <div class="video-info">
-                <div class="video-title">{video['title']}</div>
-                <div class="video-desc">{video['description']}</div>
-                <div class="video-date">{date_display}</div>
-            </div>
-        </div>''')
-    videos_html = '\n'.join(video_cards) if video_cards else '<p class="video-empty">No videos yet. Add .md files to the videos/ folder.</p>'
+    """Build the main index page (the Windows 95 Explorer)."""
+    data = build_site_data(essays, projects, videos)
+    # Serialize to JSON, then make it safe to embed inside a <script> tag.
+    site_data = json.dumps(data, ensure_ascii=False).replace('</', '<\\/')
 
     return render_template('index.html',
         site_name=SITE_NAME,
-        site_description=SITE_DESCRIPTION,
-        essays_list=essays_html,
-        projects_grid=projects_html,
-        videos_list=videos_html,
-        current_date=datetime.now().strftime('%B %d, %Y')
+        site_data=site_data,
     )
 
 def build_site():
@@ -387,25 +428,10 @@ def build_site():
     print(f"📄 Found {len(essays)} essays")
     print(f"📦 Found {len(projects)} projects")
     print(f"🎬 Found {len(videos)} videos")
-    
-    # Build essay pages
-    for essay in essays:
-        html = build_essay_page(essay, essays)
-        output_path = OUTPUT_DIR / essay['filename']
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(html)
-        print(f"   ✓ {essay['filename']}")
-    
-    # Build project pages
-    for project in projects:
-        html = build_project_page(project)
-        output_path = OUTPUT_DIR / project['filename']
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(html)
-        print(f"   ✓ {project['filename']}")
-    
-    # Build index page
-    index_html = build_index(essays, projects,videos )
+
+    # Everything is rendered inside the single-page Explorer (index.html);
+    # essays and projects open in its in-window document view.
+    index_html = build_index(essays, projects, videos)
     with open(OUTPUT_DIR / 'index.html', 'w', encoding='utf-8') as f:
         f.write(index_html)
     print(f"   ✓ index.html")
