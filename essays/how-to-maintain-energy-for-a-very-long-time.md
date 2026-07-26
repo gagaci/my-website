@@ -9,32 +9,15 @@ If you see a person who can hardly make his bed, or someone with an endless driv
 
 <figure style="margin: 24px 0; border: 2px solid #808080; box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #000; background: #fff; padding: 16px;">
   <svg viewBox="0 0 640 320" width="100%" role="img" aria-label="Graph of the dopamine system showing a spike above baseline after an activity, followed by a dip below baseline before returning to baseline." style="display:block;">
-    <!-- plot background -->
     <rect x="60" y="20" width="540" height="240" fill="#f4f4f4" stroke="#808080" stroke-width="1"/>
-
-    <!-- baseline -->
     <line x1="60" y1="150" x2="600" y2="150" stroke="#000080" stroke-width="2" stroke-dasharray="6 4"/>
     <text x="66" y="144" font-family="VT323, monospace" font-size="18" fill="#000080">Baseline</text>
-
-    <!-- dopamine curve: rest -> spike (increase) -> dip below baseline (decrease) -> recover -->
-    <path d="M 60 150
-             L 150 150
-             C 190 150, 205 55, 250 55
-             C 300 55, 315 150, 360 150
-             C 400 150, 420 225, 470 225
-             C 530 225, 560 150, 600 150"
-          fill="none" stroke="#c00000" stroke-width="3"/>
-
-    <!-- markers -->
+    <path d="M 60 150 L 150 150 C 190 150, 205 55, 250 55 C 300 55, 315 150, 360 150 C 400 150, 420 225, 470 225 C 530 225, 560 150, 600 150" fill="none" stroke="#c00000" stroke-width="3"/>
     <circle cx="250" cy="55" r="4" fill="#c00000"/>
     <circle cx="470" cy="225" r="4" fill="#c00000"/>
-
-    <!-- labels -->
     <text x="250" y="44" font-family="VT323, monospace" font-size="18" fill="#c00000" text-anchor="middle">Increase</text>
     <text x="470" y="246" font-family="VT323, monospace" font-size="18" fill="#c00000" text-anchor="middle">Decrease</text>
-    <text x="110" y="170" font-family="VT323, monospace" font-size="16" fill="#404040" text-anchor="middle">activity</text>
-
-    <!-- axis labels -->
+    <text x="150" y="140" font-family="VT323, monospace" font-size="16" fill="#404040" text-anchor="middle">activity</text>
     <text x="330" y="292" font-family="VT323, monospace" font-size="18" fill="#000" text-anchor="middle">time &rarr;</text>
     <text x="30" y="150" font-family="VT323, monospace" font-size="18" fill="#000" text-anchor="middle" transform="rotate(-90 30 150)">dopamine</text>
   </svg>
