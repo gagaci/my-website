@@ -136,7 +136,7 @@ def markdown_to_html(text):
         paragraphs.append('\n'.join(current))
     
     # Wrap non-block elements in <p> tags
-    block_elements = ['<h1', '<h2', '<h3', '<ul', '<ol', '<pre', '<blockquote', '<hr']
+    block_elements = ['<h1', '<h2', '<h3', '<ul', '<ol', '<pre', '<blockquote', '<hr', '<figure', '<svg']
     result = []
     for p in paragraphs:
         p = p.strip()
