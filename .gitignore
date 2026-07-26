@@ -1,0 +1,3 @@
+# Python bytecode cache (generated when build.py is imported/run)
+__pycache__/
+*.pyc
