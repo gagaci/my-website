@@ -316,6 +316,15 @@ ABOUT_BODY = [
     "This is my corner of the internet: essays I'm working through, projects I've shipped, and links worth keeping. The whole thing runs on a small static-site generator I wrote myself.",
 ]
 
+# Social / profile links shown in the Explorer's "About" document view.
+ABOUT_LINKS = [
+    {'name': 'X',         'detail': '@khabibbayramov', 'url': 'https://x.com/khabibbayramov'},
+    {'name': 'GitHub',    'detail': 'gagaci',          'url': 'https://github.com/gagaci'},
+    {'name': 'LeetCode',  'detail': 'gagaci',          'url': 'https://leetcode.com/u/gagaci/'},
+    {'name': 'Telegram',  'detail': '@gagaci',         'url': 'https://t.me/gagaci'},
+    {'name': 'Instagram', 'detail': 'bayramov.xv',     'url': 'https://instagram.com/bayramov.xv'},
+]
+
 # Bookmarks shown in the Explorer's "Bookmarks" folder.
 BOOKMARKS = [
     {'name': 'Hacker News',     'detail': 'news.ycombinator.com',  'url': 'https://news.ycombinator.com'},
@@ -368,6 +377,7 @@ def build_site_data(essays, projects, videos):
         'icon': 'ic-person', 'name': 'About', 'kind': 'about',
         'desc': "Who I am and what I'm working on.",
         'body': ABOUT_BODY,
+        'links': ABOUT_LINKS,
     }
 
     # Videos — double-click opens the YouTube link.
@@ -381,14 +391,13 @@ def build_site_data(essays, projects, videos):
         } for v in videos],
     }
 
-    # Home grid order (whoami.exe is decorative — no page to open).
+    # Home grid order.
     sections = [
         {'id': 'essays',    'icon': 'ic-doc',     'name': 'Essays',     'verb': 'read',    'desc': pages['essays']['desc']},
         {'id': 'projects',  'icon': 'ic-folder',  'name': 'Projects',   'verb': 'explore', 'desc': pages['projects']['desc']},
         {'id': 'bookmarks', 'icon': 'ic-star',    'name': 'Bookmarks',  'verb': 'browse',  'desc': pages['bookmarks']['desc']},
         {'id': 'about',     'icon': 'ic-person',  'name': 'About',      'verb': 'info',    'desc': pages['about']['desc']},
         {'id': 'videos',    'icon': 'ic-video',   'name': 'Videos',     'verb': 'watch',   'desc': pages['videos']['desc']},
-        {'id': 'whoami',    'icon': 'ic-monitor', 'name': 'whoami.exe', 'verb': 'run',     'desc': 'builder, writer, tinkerer'},
     ]
 
     return {

@@ -361,7 +361,15 @@ function listHTML(page){
 
 function aboutHTML(page){
   var body = page.body.map(function(p){ return '<p>'+esc(p)+'</p>'; }).join('');
-  return '<div class="doc-body" style="padding:24px 28px; max-width:640px;">'+body+'</div>';
+  var links = '';
+  if (page.links && page.links.length){
+    var items = page.links.map(function(l){
+      return '<li><a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.name)+'</a>'
+        + (l.detail ? ' <span style="color:#666;">— '+esc(l.detail)+'</span>' : '') + '</li>';
+    }).join('');
+    links = '<h2>Links</h2><ul>'+items+'</ul>';
+  }
+  return '<div class="doc-body" style="padding:24px 28px; max-width:640px;">'+body+links+'</div>';
 }
 
 function docHTML(item){
